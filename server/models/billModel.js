@@ -22,6 +22,11 @@ const billSchema = new mongoose.Schema({
     type: String,  // URL or base64 string
     required: true  
   },
+  paymentStatus:{
+   type :Boolean,
+   required: true,
+   default: false
+  },
   userId:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

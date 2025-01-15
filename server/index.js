@@ -15,7 +15,9 @@ import "./db.js";
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from "./routes/userRoutes.js"
 import billRoutes from "./routes/billRoutes.js";
-import feedbackRoutes from "./routes/feedbackRoutes.js"
+import feedbackRoutes from "./routes/feedbackRoutes.js";
+import contactUsRoutes from "./routes/contactUsRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js"
 app.use(bodyParser.json());
 import cors  from "cors";
 
@@ -37,6 +39,8 @@ app.use('/api/user',userRoutes );
 app.use('/api/bill',billRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/feedback' ,feedbackRoutes);
+app.use('/api/contact-us', contactUsRoutes);
+app.use('/api/razorpay' ,paymentRoutes);
 
 app.get('/', (req, res)=>{
     res.json({

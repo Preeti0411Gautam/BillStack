@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// import { IoIosArrowForward ,IoIosArrowBack } from "react-icons/io";
 
 const Feedbacks = () => {
     const [feedbacks, setFeedbacks] = useState([]);
@@ -44,7 +45,9 @@ const Feedbacks = () => {
                 <p className="text-center text-gray-400 text-3xl font-semibold border p-4 rounded-lg">No feedbacks available......</p>
             ) : (
                 <ul className="grid grid-cols-2 md:grid-cols-2 gap-8">
+                    {/* <IoIosArrowBack /> */}
                     {feedbacks.map((feedback) => (
+                    
                         <li
                             key={feedback._id}
                             className=" rounded-2xl p-6 border-4 border-gray-100 "
@@ -57,7 +60,9 @@ const Feedbacks = () => {
                                 {new Date(feedback.date).toLocaleDateString('en-GB')}
                             </p>
                         </li>
+                        
                     ))}
+                    {/* <IoIosArrowForward /> */}
                 </ul>
             )}
         </div>

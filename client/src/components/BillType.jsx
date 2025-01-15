@@ -13,6 +13,13 @@ const BillType = () => {
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(false);
+
+  const handlePaymentStatusChange = (event) => {
+    setPaymentStatus(event.target.checked);
+  };
+  
+
 
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -44,6 +51,8 @@ const BillType = () => {
       formWithUserId.append("dueDate", formData.dueDate);
       formWithUserId.append("description", formData.description);
       formWithUserId.append("billImage", formData.billImage);
+      formWithUserId.append("paymentStatus" ,paymentStatus ?"true" :"false");
+
 
       const res = await fetch(`/api/bill/upload`, {
         method: "POST",
@@ -153,6 +162,34 @@ const BillType = () => {
                 onChange={handleFileChange}
               />
             </div>
+            <div className="mb-8">
+            <label className="block text-gray-700 text-xl font-bold mb-2" htmlFor="paymentStatus">
+              Payment Status
+            </label>
+            <div className="flex justify-around">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="paymentStatus"
+                  value={true}
+                  checked={paymentStatus}
+                  onChange={() => setPaymentStatus(true)}
+                />
+                <span className="ml-2">True</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="paymentStatus"
+                  value={false}
+                  checked={!paymentStatus}
+                  onChange={() => setPaymentStatus(false)}
+                />
+                <span className="ml-2">False</span>
+              </label>
+            </div>
+         </div>
+
             <div className="flex items-center justify-between">
               <button
                 className="w-full bg-red-800 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"

@@ -3,11 +3,13 @@ import uploadOnCloudinary from '../utils/cloudinary.js';
 import fs from "fs";
 
 export const uploadBill = async (req, res) => {
+
+    
     try {
 
 
       console.log(req.body);
-        const { userId, billType, amount, dueDate, description } = req.body;
+        const { userId, billType, amount, dueDate, description, paymentStatus } = req.body;
         const billImageLocalPath = req.file?.path;
        
         if (!billImageLocalPath) {
@@ -27,10 +29,10 @@ export const uploadBill = async (req, res) => {
             });
         }
 
-        if (!billType || !amount || !dueDate || !userId) {
+        if (!billType || !amount || !dueDate || !userId || !paymentStatus) {
             return res.status(400).json({
                 success: false,
-                message: "Please provide all the required details (billType, amount, dueDate, billImage, userId).",
+                message: "Please provide all the required details (billType, amount, dueDate, billImage, userId , paymentStatus).",
             });
         }
 
@@ -48,6 +50,7 @@ export const uploadBill = async (req, res) => {
             dueDate,
             description,
             billImage: billImage.url,
+            paymentStatus
         });
 
         await newBill.save();
@@ -116,6 +119,8 @@ export const getBill =async(req,res)=>{
     }
 
     const bills = await Bill.find({userId});
+    console.log(bills);
+    
     if(bills.length===0){
         return res.json({
             success: false, 

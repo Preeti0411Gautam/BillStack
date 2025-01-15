@@ -9,9 +9,10 @@ import Signup from "./components/Signup";
 import BillList from './components/BillList';
 import Home from './components/Home';
 import Profile from './components/Profile';
-import About from './components/About';
+// import About from './components/About';
 import PrivateRoute from './components/PrivateRoute';
 import Analytics from './components/Analytics';
+import Notification from './components/Notification';
 
 const App = () => {
   return (
@@ -26,7 +27,7 @@ const App = () => {
             <Route path="/billType" element={<BillType />} />
             <Route path="/login" element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
-            <Route path='/about' element={<About/>}/>
+            <Route path='/notification' element={<Notification/>}/>
             <Route path="/analytics" element={<Analytics/>}/>
             <Route element= {<PrivateRoute/>}>
                 <Route path='/profile' element={<Profile/>}/>

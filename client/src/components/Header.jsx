@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { IoIosNotifications } from "react-icons/io";
 
 
 
@@ -27,7 +28,10 @@ const handleUploadBill=()=>{
 const handleLogo=()=>{
   navigate("/");
 }
-
+ 
+const handleNotification=()=>{
+  navigate("/notification");
+}
 const handleAnalytics =()=>{
   navigate("/analytics")
 }
@@ -43,9 +47,11 @@ const handleAnalytics =()=>{
             <li onClick ={handleUploadBill} className='hover:text-red-600 transition duration-300'>Upload Bill</li>
             <li onClick={handleBillList} className='hover:text-red-600 transition duration-300'>Bill List</li>
             <li onClick={handleAnalytics} className='hover:text-red-600 transition duration-300'>Analytics</li>
-            {/* <li onClick={handleClickAbout} className='hover:text-red-600 transition duration-300'>About</li> */}
-           <li  className='hover:text-red-600 transition duration-300'>
+            <li className='hover:text-red-600 transition duration-300'>
+            {currentUser && (<p onClick={handleNotification}><IoIosNotifications size={30} /></p>)}
+            </li>
 
+           <li  className='hover:text-red-600 transition duration-300'>
             {currentUser ? <p onClick={handleProfile}>{(currentUser.name)}</p> : <p onClick={handleClick}>Sign In</p>}
             </li>
            
