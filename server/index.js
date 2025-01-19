@@ -40,7 +40,7 @@ app.use('/api/bill',billRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/feedback' ,feedbackRoutes);
 app.use('/api/contact-us', contactUsRoutes);
-app.use('/api/razorpay' ,paymentRoutes);
+app.use('/api/payment' ,paymentRoutes);
 
 app.get('/', (req, res)=>{
     res.json({

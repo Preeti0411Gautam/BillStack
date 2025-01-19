@@ -13,7 +13,7 @@ import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import Analytics from './components/Analytics';
 import Notification from './components/Notification';
-
+import History from './components/History';
 const App = () => {
   return (
     <BrowserRouter>
@@ -29,6 +29,7 @@ const App = () => {
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/notification' element={<Notification/>}/>
             <Route path="/analytics" element={<Analytics/>}/>
+            <Route path="/history" element={<History/>}/>
             <Route element= {<PrivateRoute/>}>
                 <Route path='/profile' element={<Profile/>}/>
             </Route>

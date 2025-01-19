@@ -71,9 +71,9 @@ const BillList = () => {
     try {
       const options = {
         billId: bill._id,
-        amount: bill.amount*100
+        amount: bill.amount
       }
-      const response = await fetch(`/api/razorpay/createOrder`, {
+      const response = await fetch(`/api/payment/createOrder`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -82,22 +82,19 @@ const BillList = () => {
       });
       const data = await response.json();
 
-      console.log(data);
-
       const paymentObject = new window.Razorpay({
         key: "rzp_test_MDSLJ2BaZKvTuz",
         order_id: data.id,
         ...data,
         handler: function (response) {
-          console.log(response);
-
           const options2 = {
             order_id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
             signature: response.razorpay_signature,
+            billId :bill._id,  
+            userId: currentUser._id
           }
-
-          fetch(`/api/razorpay/verifyPayment`, {
+          fetch(`/api/payment/verifyPayment`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -105,7 +102,6 @@ const BillList = () => {
             body: JSON.stringify(options2)
           }).then(res => res.json())
             .then(data => {
-              console.log(data);
               if (data.success) {
                 alert("Payment Successful");
               } else {
@@ -116,20 +112,21 @@ const BillList = () => {
       })
 
       paymentObject.open();
-
     } catch (error) {
       console.log("Error creating order or initiating payment:", error);
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen pt-5 ">
-      <h1 className="text-4xl font-bold mb-10 text-gray-800">Bill Types</h1>
-      <ul className="flex flex-row space-x-4 mb-10">
+    <div className="flex flex-col items-center justify-start min-h-screen pt-5 px-4 sm:px-6">
+      <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">Bill Types</h1>
+      <ul className="flex flex-wrap justify-center space-x-4 mb-10">
         {list.map((item) => (
           <li key={item.id}>
             <button
-              className={`border-2 rounded-lg px-4 py-2 font-semibold font-mono transition duration-300 ${selectedBillType === item.type ? "bg-red-800 text-white border-red-800" : "bg-gray-100 text-gray-800 hover:bg-gray-200"}`}
+              className={`border-2 rounded-lg px-4 py-2 font-semibold font-mono transition duration-300 ${
+                selectedBillType === item.type ? "bg-red-800 text-white border-red-800" : "bg-white text-gray-800 hover:bg-gray-200"
+              }`}
               onClick={() => handleButtonClick(item.type)}
               disabled={loading}
             >
@@ -138,7 +135,7 @@ const BillList = () => {
           </li>
         ))}
       </ul>
-      <div className="mt-10 w-full max-w-5xl">
+      <div className="mt-10 w-full max-w-5xl mx-auto">
         <h2 className="text-2xl font-mono font-semibold mb-5 text-gray-700">
           Fetched Bills - {selectedBillType || "None"}
         </h2>
@@ -147,13 +144,11 @@ const BillList = () => {
             Please sign in to view your bill list...
           </p>
         ) : loading ? (
-          <p className="text-gray-400 font-semibold text-2xl">
-            Loading bills...
-          </p>
+          <p className="text-gray-400 font-semibold text-2xl">Loading bills...</p>
         ) : errorMessage ? (
           <p className="text-red-500 font-semibold text-2xl">{errorMessage}</p>
         ) : filteredBills.length > 0 ? (
-          <ul className="bg-white p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <ul className="bg-white p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredBills.map((bill) => (
               <li
                 key={bill._id}
@@ -183,9 +178,7 @@ const BillList = () => {
                       <span className="text-green-600 font-semibold">Paid</span>
                     ) : (
                       <div className="flex items-center space-x-4">
-                        <span className="text-red-800 font-semibold">
-                          Unpaid
-                        </span>
+                        <span className="text-red-800 font-semibold">Unpaid</span>
                         <button
                           className="px-4 py-2 bg-green-500 border rounded-lg text-white hover:bg-green-600 transition duration-300"
                           onClick={() => paymentHandler(bill)}
@@ -200,7 +193,7 @@ const BillList = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-400 font-semibold text-2xl">
+          <p className="text-gray-400 font-semibold text-2xl text-center">
             No bills found. Select a type from the options above.
           </p>
         )}

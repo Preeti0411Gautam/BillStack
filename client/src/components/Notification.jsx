@@ -1,79 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Notification = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   const fetchBills = async () => {
     try {
-      if (!currentUser._id) return;
+      if (!currentUser) return;
 
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/bill/getBillByUserId/${currentUser._id}`, { 
-        method: "GET"
-       });
+      const response = await fetch(`/api/bill/getBillByUserId/${currentUser._id}`, {
+        method: "GET",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch bills");
       }
 
       const data = await response.json();
-      // console.log("data", data.data);
 
-      // Calculate target date which is 4 days from current date
+      // Get the current date and target date (4 days from now)
+      const currentDate = new Date();
       const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() + 4);
+      targetDate.setDate(currentDate.getDate() + 4);
 
-      // Extract billType and dueDate, and filter based on dueDate
-      const filteredBills = data.data.filter(bill => {
-        const dueDate = new Date(bill.dueDate);
-        return (
-          dueDate.getFullYear() === targetDate.getFullYear() &&
-          dueDate.getMonth() === targetDate.getMonth() &&
-          dueDate.getDate() === targetDate.getDate()
-        );
-      }).map(bill => ({
-        billType: bill.billType,
-        dueDate: bill.dueDate
-      }));
+      // Filter bills based on dueDate and paymentStatus
+      const filteredBills = data.data
+        .filter((bill) => {
+          const dueDate = new Date(bill.dueDate);
+          return (
+            !bill.paymentStatus && // Only unpaid bills
+            dueDate >= currentDate && // Due date is in the future
+            dueDate <= targetDate // Due date is within 4 days
+          );
+        })
+        .map((bill) => ({
+          billType: bill.billType,
+          dueDate: new Date(bill.dueDate).toLocaleDateString(), // Format the date
+        }));
 
       setFilteredData(filteredBills);
     } catch (err) {
-      console.log(err);
-      setError(err.message);
+      console.error("Error fetching bills:", err);
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
+  // Polling to fetch bills every 5 minutes
   useEffect(() => {
     fetchBills();
-  }, [currentUser._id]);
+    const interval = setInterval(fetchBills, 5 * 60 * 1000); // 5 minutes
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [currentUser]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (!currentUser) {
+    return (
+      <div className="text-center text-3xl font-semibold text-gray-400">
+        Please Sign in to see notifications...
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <div className="text-center text-xl text-gray-500">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-xl text-red-600">Error: {error}</div>;
+  }
 
   return (
-    <div>
-      {/* <h1>Notifications</h1> */}
-      <ul>
-          {filteredData.length !== 0 ? (
-            filteredData.map((bill, index) => (
-              <li key={index} className='font-semibold text-xl'>
-                <p className='text-red-800 font-bold pb-4 text-2xl'>Upcoming due date :</p>
-                <p>{bill.billType} bill due on <em className='text-red-400'>{bill.dueDate.slice(0, 10)}</em></p>
-              </li>
-            ))
-          ) : (
-            <p>Nothing to Show</p>
-          )}
-       </ul>
-
+    <div className="max-w-4xl mx-auto p-4 lg:p-8">
+      <ul className="space-y-6">
+        {filteredData.length !== 0 ? (
+          filteredData.map((bill, index) => (
+            <li
+              key={index}
+              className="p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all"
+            >
+              <p className="text-red-800 font-bold text-2xl pb-4">
+                Upcoming Due Date:
+              </p>
+              <p className="text-lg">
+                <span className="font-semibold">{bill.billType}</span> bill due on
+                <em className="text-red-400 ml-2">{bill.dueDate}</em>
+              </p>
+            </li>
+          ))
+        ) : (
+          <p className="text-center text-3xl text-gray-400">
+            No upcoming bills...
+          </p>
+        )}
+      </ul>
     </div>
   );
 };

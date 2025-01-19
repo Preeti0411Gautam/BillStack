@@ -1,50 +1,50 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
 const paymentSchema = new Schema(
   {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+    userId:{
+      type:Schema.Types.ObjectId,
+      red:'User',
+      required: true
     },
     billId: {
       type: Schema.Types.ObjectId,
-      ref: 'Bill',
+      ref: "Bill",
       required: true,
     },
     amount: {
       type: Number,
       required: true,
-      min: [0, 'Amount must be positive'],
     },
     currency: {
       type: String,
-      default: 'INR',
-      required: true,
+      default: "INR",
     },
     paymentMethod: {
       type: String,
-      enum: ['Credit Card', 'Debit Card', 'UPI', 'Net Banking', 'Cash'],
       required: true,
     },
     status: {
       type: String,
-      enum: ['Pending', 'Completed', 'Failed'],
-      default: 'Pending',
+      default: "Pending",
+    },
+    created_on: {
+      type: String, // Store created date as a string (ensure proper formatting)
+      required: true,
     },
     transactionId: {
       type: String,
-      required: true,
       unique: true,
+      required: true, // Ensure this is always provided
     },
   },
   {
-    timestamps: true, // Automatically handles createdAt and updatedAt
+    timestamps: true, // Automatically add `createdAt` and `updatedAt` fields
   }
 );
 
-const Payment = model('Payment', paymentSchema);
+const Payment = model("Payment", paymentSchema);
 
 export default Payment;

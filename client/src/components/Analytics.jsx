@@ -56,11 +56,9 @@ const Analytics = () => {
         `/api/bill/getBillByUserId/${currentUser._id}`,
         { method: "GET" }
       );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
-      return result.data; // Return the data array
+      return result.data;
     } catch (error) {
       console.error("Error fetching user data:", error);
       throw error;
@@ -71,8 +69,11 @@ const Analytics = () => {
     const fetchData = async () => {
       try {
         const data = await fetchUserData();
+        // Filter bills where paymentStatus is true
+        const validBills = data.filter((bill) => bill.paymentStatus === true);
+
         const currentMonth = new Date().getMonth();
-        const currentMonthBillExpenses = data.filter(
+        const currentMonthBillExpenses = validBills.filter(
           (item) => new Date(item.dueDate).getMonth() === currentMonth
         );
 
@@ -91,22 +92,22 @@ const Analytics = () => {
         setTotalBillsSum(totalSum);
 
         const labels = months;
-        const internetAmount = data
+        const internetAmount = validBills
           .filter((item) => item.billType === "Internet")
           .map((item) => item.amount);
-        const electricityAmount = data
+        const electricityAmount = validBills
           .filter((item) => item.billType === "Electricity")
           .map((item) => item.amount);
-        const waterAmount = data
+        const waterAmount = validBills
           .filter((item) => item.billType === "Water")
           .map((item) => item.amount);
-        const gasAmount = data
+        const gasAmount = validBills
           .filter((item) => item.billType === "Gas")
           .map((item) => item.amount);
-        const otherAmount = data
+        const otherAmount = validBills
           .filter((item) => item.billType === "Other")
           .map((item) => item.amount);
-        const rentAmount = data
+        const rentAmount = validBills
           .filter((item) => item.billType === "Rent")
           .map((item) => item.amount);
 
@@ -116,50 +117,74 @@ const Analytics = () => {
             {
               label: "Internet",
               data: internetAmount,
-              borderColor: "green",
-              backgroundColor: "#8FD14F",
-              borderWidth: 2,
+              borderColor: "#8FD14F",
+              backgroundColor: "rgba(143, 209, 79, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3, // Smooth curves
             },
             {
               label: "Electricity",
               data: electricityAmount,
-              borderColor: "red",
-              backgroundColor: "#EF5A6F",
-              borderWidth: 2,
+              borderColor: "#EF5A6F",
+              backgroundColor: "rgba(239, 90, 111, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
             },
             {
               label: "Water",
               data: waterAmount,
-              borderColor: "blue",
-              backgroundColor: "#478CCF",
-              borderWidth: 2,
+              borderColor: "#478CCF",
+              backgroundColor: "rgba(71, 140, 207, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
             },
             {
               label: "Gas",
               data: gasAmount,
-              borderColor: "orange",
-              backgroundColor: "#F96E2A",
-              borderWidth: 2,
+              borderColor: "#F96E2A",
+              backgroundColor: "rgba(249, 110, 42, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
             },
             {
               label: "Other",
               data: otherAmount,
-              borderColor: "#088395",
-              backgroundColor: "#37B7C3",
-              borderWidth: 2,
+              borderColor: "#37B7C3",
+              backgroundColor: "rgba(55, 183, 195, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
             },
             {
               label: "Rent",
               data: rentAmount,
-              borderColor: "pink",
-              backgroundColor: "#FF76CE",
-              borderWidth: 2,
+              borderColor: "#FF76CE",
+              backgroundColor: "rgba(255, 118, 206, 0.4)",
+              borderWidth: 3,
               fill: true,
+              pointStyle: "circle",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
             },
           ],
         });
@@ -175,6 +200,7 @@ const Analytics = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -182,12 +208,34 @@ const Analytics = () => {
         font: { size: 24 },
         color: "#1F2937",
       },
-      tooltip: { mode: "index", intersect: false },
-      legend: { display: true, position: "top" },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        titleColor: "#fff",
+        bodyColor: "#fff",
+        bodyFont: { size: 14 },
+      },
+      legend: {
+        display: true,
+        position: "top",
+        labels: {
+          color: "#333",
+          font: { size: 14 },
+        },
+      },
     },
     scales: {
-      x: { title: { display: true, text: "Month", color: "#4B5563" } },
-      y: { title: { display: true, text: "Amount (INR)", color: "#4B5563" } },
+      x: {
+        title: { display: true, text: "Month", color: "#4B5563" },
+        grid: { display: false },
+      },
+      y: {
+        title: { display: true, text: "Amount (INR)", color: "#4B5563" },
+        grid: {
+          color: "rgba(200, 200, 200, 0.2)", // Lighter grid lines
+        },
+      },
     },
   };
 
@@ -200,44 +248,56 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="loader"></div>
+        <div className="loader">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-6">
-      <div className="w-full max-w-4xl p-6">
-        {chartData ? (
-          <Line options={options} data={chartData} />
-        ) : (
-          <p className="text-center text-lg text-gray-500">
-            No data available for analytics.
-          </p>
-        )}
-      </div>
-      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Total Expenses
-        </h2>
-        <p className="text-lg text-gray-600">
-          Total Expenses till Today:{" "}
-          <span className="text-red-500 font-semibold">{totalExpenses}</span>
-        </p>
-        <div className="mt-4">
-          <h3 className="text-xl font-bold text-gray-800 mb-2">
-            Aggregate Bill Expenses
-          </h3>
-          <ul className="space-y-2">
-            {Object.entries(billTypeSums).map(([key, value]) => (
-              <li key={key} className="flex justify-between">
-                <span className="text-gray-700">{key}</span>
-                <span className="text-orange-500">{value}</span>
-              </li>
-            ))}
-          </ul>
+    <div className="flex flex-col items-center p-6 space-y-8 w-full max-w-screen-xl mx-auto">
+      {currentUser === null ? (
+        <div className="text-center  text-3xl font-semibold text-gray-400">
+          Please sign in to see Analytics...
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="w-full lg:max-w-4xl p-6">
+            {chartData ? (
+              <div
+                style={{ position: "relative", width: "100%", height: "400px" }}
+              >
+                <Line options={options} data={chartData} />
+              </div>
+            ) : (
+              <p className="text-center text-lg text-gray-500">
+                No data available for analytics.
+              </p>
+            )}
+          </div>
+          <div className="w-full lg:max-w-4xl bg-white shadow-xl rounded-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              Total Expenses
+            </h2>
+            <p className="text-lg text-gray-600 mb-6">
+              Total Expenses till Today:{" "}
+              <span className="text-red-500 font-semibold">
+                {totalExpenses}
+              </span>
+            </p>
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Aggregate Bill Expenses
+            </h3>
+            <ul className="space-y-2">
+              {Object.entries(billTypeSums).map(([key, value]) => (
+                <li key={key} className="flex justify-between text-gray-700">
+                  <span>{key}</span>
+                  <span className="text-orange-500">{value}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 };
