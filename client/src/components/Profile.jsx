@@ -72,7 +72,35 @@ const Profile = () => {
       console.log(err.message);
     }
   };
+ 
 
+  const handleDelete = async () => {
+    console.log(currentUser)
+    try {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!res.ok) {
+        const data = await res.json();
+        console.error(`Error ${res.status}: ${data.message || 'An error occurred'}`);
+        alert(data.message || 'Failed to delete user. Please try again.');
+        return;
+      }
+  
+      // If the API call is successful
+      alert('User deleted successfully');
+      dispatch(signoutSuccess());
+    } catch (err) {
+      console.error('Network error:', err.message);
+      alert('Network error. Please check your connection and try again.');
+    }
+  };
+  
+  
   return (
     <div className="flex flex-col items-center min-h-screen py-8">
       <div className="bg-white rounded-lg p-6 w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
@@ -136,7 +164,9 @@ const Profile = () => {
         )}
 
         <div className="text-red-800 font-bold text-lg flex justify-between mt-8">
-          <span className="hover:underline mr-10 cursor-pointer">Delete Account</span>
+          <span 
+          onClick={handleDelete}
+          className="hover:underline mr-10 cursor-pointer">Delete Account</span>
           <span
             onClick={handleSignout}
             className="hover:underline ml-10 cursor-pointer"
