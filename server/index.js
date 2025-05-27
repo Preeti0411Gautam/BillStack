@@ -11,7 +11,6 @@ const app= express();
 app.use(cookieParser());
 
 import "./db.js";
-
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from "./routes/userRoutes.js"
 import billRoutes from "./routes/billRoutes.js";

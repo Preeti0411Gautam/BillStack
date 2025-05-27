@@ -1,8 +1,8 @@
 import React from 'react';
-import FeedbackForm from './FeedbackForm';
+import FeedbackForm from '../common/FeedbackForm';
 import Feedbacks from './Feedbacks';
 import ConnectUs from './ConnectUs';
-import FeaturesSection from './FeatureSection';
+import FeaturesSection from '../common/FeatureSection';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {

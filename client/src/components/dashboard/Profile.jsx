@@ -7,7 +7,7 @@ import {
   updateUserFailure,
   updateUserSuccess,
   signoutSuccess
-} from '../redux/user/userSlice';
+} from '../../redux/user/userSlice';
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
