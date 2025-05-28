@@ -170,7 +170,9 @@ const BillList = () => {
                   </p>
                   <p className="mb-2">
                     <strong>Due Date:</strong>{" "}
-                    {new Date(bill.dueDate).toLocaleDateString()}
+                    {new Date(bill.dueDate).toLocaleDateString()
+                    }
+                    {/* {console.log(bill)} */}
                   </p>
                   <div className="flex items-center space-x-2 mt-4">
                     <strong>Status:</strong>

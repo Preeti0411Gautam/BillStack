@@ -11,6 +11,7 @@ const app= express();
 app.use(cookieParser());
 
 import "./db.js";
+import { startBillNotifier } from './jobs/dailyNotifier.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from "./routes/userRoutes.js"
 import billRoutes from "./routes/billRoutes.js";
@@ -19,6 +20,8 @@ import contactUsRoutes from "./routes/contactUsRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js"
 app.use(bodyParser.json());
 import cors  from "cors";
+
+startBillNotifier();
 
 // import cors from 'cors';
 

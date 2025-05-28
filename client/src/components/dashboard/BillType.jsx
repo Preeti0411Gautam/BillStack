@@ -7,6 +7,7 @@ const BillType = () => {
     billType: "",
     amount: "",
     dueDate: "",
+    billGeneratedDate:"",
     description: "",
     billImage: null,
   });
@@ -49,6 +50,7 @@ const BillType = () => {
       formWithUserId.append("billType", formData.billType);
       formWithUserId.append("amount", formData.amount);
       formWithUserId.append("dueDate", formData.dueDate);
+      formWithUserId.append("billGeneratedDate", formData.billGeneratedDate);
       formWithUserId.append("description", formData.description);
       formWithUserId.append("billImage", formData.billImage);
       formWithUserId.append("paymentStatus" ,paymentStatus ?"true" :"false");
@@ -138,6 +140,20 @@ const BillType = () => {
                 onChange={handleChange}
               />
             </div>
+            <div className="mb-8">
+  <label className="block text-gray-700 text-xl font-bold mb-2" htmlFor="billGeneratedDate">
+    Bill Generated Date
+  </label>
+  <input
+    className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    type="date"
+    id="billGeneratedDate"
+    placeholder="Enter Bill Generated Date"
+    value={formData.billGeneratedDate}
+    onChange={handleChange}
+  />
+</div>
+
             <div className="mb-8">
               <label className="block text-gray-700 text-xl font-bold mb-2" htmlFor="description">
                 Description

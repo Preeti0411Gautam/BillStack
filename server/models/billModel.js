@@ -1,14 +1,13 @@
 import mongoose from 'mongoose';
-
 const billSchema = new mongoose.Schema({
   billType: {
     type: String,
     enum: ['Electricity', 'Water', 'Gas', 'Internet', 'Rent', 'Other'],
     required: true
   },
-  description:{
-   type: String,
-   default:""
+  description: {
+    type: String,
+    default: ""
   },
   amount: {
     type: Number,
@@ -19,20 +18,27 @@ const billSchema = new mongoose.Schema({
     required: true
   },
   billImage: {
-    type: String,  // URL or base64 string
-    required: true  
+    type: String,
+    required: true
   },
-  paymentStatus:{
-   type :Boolean,
-   required: true,
-   default: false
+  paymentStatus: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  userId:{
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  billGeneratedDate: {
+    type: Date,
+    required: true
   }
+}, {
+  timestamps: true  
 });
+
 
 const Bill = mongoose.model('Bills', billSchema);
 

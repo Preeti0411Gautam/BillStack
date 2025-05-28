@@ -9,7 +9,7 @@ export const uploadBill = async (req, res) => {
 
 
       console.log(req.body);
-        const { userId, billType, amount, dueDate, description, paymentStatus } = req.body;
+        const { userId, billType, amount, dueDate,billGeneratedDate, description, paymentStatus } = req.body;
         const billImageLocalPath = req.file?.path;
        
         if (!billImageLocalPath) {
@@ -29,10 +29,10 @@ export const uploadBill = async (req, res) => {
             });
         }
 
-        if (!billType || !amount || !dueDate || !userId || !paymentStatus) {
+        if (!billType || !amount || !dueDate||!billGeneratedDate || !userId || !paymentStatus) {
             return res.status(400).json({
                 success: false,
-                message: "Please provide all the required details (billType, amount, dueDate, billImage, userId , paymentStatus).",
+                message: "Please provide all the required details (billType, amount, dueDate,billGeneratedDate, billImage, userId , paymentStatus).",
             });
         }
 
@@ -48,6 +48,7 @@ export const uploadBill = async (req, res) => {
             billType,
             amount,
             dueDate,
+            billGeneratedDate,
             description,
             billImage: billImage.url,
             paymentStatus
