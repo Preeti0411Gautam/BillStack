@@ -19,7 +19,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!formData.username || !formData.password) {
       dispatch(signInFailure("Please fill in all fields"));
       return;
@@ -48,41 +47,41 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen font-mono">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-50">
       <form
-        className="w-full max-w-sm bg-white border rounded-lg p-6"
         onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white border border-gray-200 shadow-xl rounded-2xl p-8 sm:p-10"
       >
-        <h2 className="text-4xl font-bold text-center mb-10 text-red-800">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-10">
           Login
         </h2>
 
         <div className="mb-8">
-          <label className="block text-red-800 font-semibold text-xl mb-4">
+          <label className="block text-lg font-semibold mb-2 text-gray-800">
             Username / Email
           </label>
           <input
             type="text"
             name="username"
-            placeholder="Enter Your Username or Email"
+            placeholder="Enter your username or email"
             value={formData.username}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
 
         <div className="mb-8">
-          <label className="block text-red-800 font-semibold text-xl mb-4">
+          <label className="block text-lg font-semibold mb-2 text-gray-800">
             Password
           </label>
           <input
             type="password"
             name="password"
-            placeholder="Enter Your Password"
+            placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
@@ -90,20 +89,23 @@ const Login = () => {
         <button
           disabled={loading}
           type="submit"
-          className="w-full bg-red-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-900 transition-colors disabled:opacity-70"
+          className="w-full bg-gray-800 text-white py-2 font-semibold rounded-lg hover:bg-gray-900 transition disabled:opacity-70"
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="p-2 mt-5 text-center">
+        <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link to="/signup" className="underline text-red-800 font-bold">
+          <Link
+            to="/signup"
+            className="text-gray-800 font-semibold underline hover:text-gray-900"
+          >
             Create an Account
           </Link>
         </p>
 
         {error && (
-          <p className="p-2 mt-2 text-red-800 text-center">
+          <p className="mt-4 text-center text-sm text-red-600 font-medium">
             {error}
           </p>
         )}

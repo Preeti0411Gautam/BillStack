@@ -9,149 +9,133 @@ const Signup = () => {
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] =useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-   if(!formData.username || !formData.email || !formData.password){
-           return setErrorMessage("Please provide all details")
-   }
-    try {
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("Please provide all details");
+    }
 
+    try {
       setLoading(true);
       setErrorMessage(null);
       const response = await fetch("https://billstack.onrender.com/api/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
-      if (data.success ===false) {
-         return setErrorMessage(data.message)
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
 
-      } 
-    if(response.ok){
-      navigate("/login"); // Redirect to login page on success
-    }
+      if (response.ok) {
+        navigate("/login");
+      }
     } catch (error) {
       setErrorMessage(error.message);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen px-4">
       <form
         onSubmit={handleSubmit}
-        className="border p-8 rounded-lg w-full max-w-sm"
+        className="w-full max-w-md bg-white border border-gray-200 shadow-xl p-8 rounded-2xl"
       >
-        <h2 className="text-4xl font-bold mb-10 text-center text-red-800">
+        <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">
           Sign Up
         </h2>
 
-      
-
-       
         <div className="mb-8">
-          <label  className="block  text-red-800 font-semibold text-xl pb-4">
-          Username
-            </label>
-    
+          <label className="block text-xl font-semibold text-gray-800 mb-3">
+            Username
+          </label>
           <input
             name="username"
             type="text"
-            placeholder="Enter Your Username"
+            placeholder="Enter your username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
 
-      
         <div className="mb-8">
-          <label  className="block  text-red-800 font-semibold text-xl pb-4">Name</label>
-          
+          <label className="block text-xl font-semibold text-gray-800 mb-3">
+            Name
+          </label>
           <input
             name="name"
             type="text"
-            placeholder="Enter Your Name"
+            placeholder="Enter your name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
 
- 
         <div className="mb-8">
-          <label className="block  text-red-800 font-semibold text-xl pb-4">Email</label>
-           
+          <label className="block text-xl font-semibold text-gray-800 mb-3">
+            Email
+          </label>
           <input
             name="email"
             type="email"
-            placeholder="Enter Your Email"
+            placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
 
-       
         <div className="mb-8">
-          <label className="block  text-red-800 font-semibold text-xl pb-4">Password</label>
-           
+          <label className="block text-xl font-semibold text-gray-800 mb-3">
+            Password
+          </label>
           <input
             name="password"
             type="password"
-            placeholder="Enter Your Password"
+            placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-800"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
           />
         </div>
 
-        
         <button
           disabled={loading}
           type="submit"
-          className="mb-8 w-full bg-red-800 text-white py-2 rounded-lg transition duration-200 hover:bg-red-700"
+          className="w-full bg-gray-800 text-white font-medium py-2 rounded-lg hover:bg-gray-900 transition disabled:opacity-70"
         >
-          {
-            loading ? ("loading..."): "Sign Up"
-          }
+          {loading ? "Creating..." : "Sign Up"}
         </button>
 
-        {
-          errorMessage && (
-            <p className="mt-5 ">{errorMessage}</p>
-          )
-        }
-         {/* Redirect to Login */}
-      <div className="text-center">
-          Already Have An Account?{" "}
-          <Link to="/login">
-            <strong className="underline text-red-800">Login</strong>
+        {errorMessage && (
+          <p className="mt-5 text-center text-red-600 font-medium">{errorMessage}</p>
+        )}
+
+        <p className="mt-6 text-sm text-center text-gray-600">
+          Already have an account?{" "}
+          <Link to="/login" className="font-semibold underline text-gray-800 hover:text-gray-900">
+            Login
           </Link>
-        </div>
+        </p>
       </form>
-
-     
-
-       
     </div>
   );
 };

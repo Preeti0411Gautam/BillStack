@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IoIosNotifications } from "react-icons/io";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -10,74 +10,50 @@ const Header = () => {
 
   const [notificationCount, setNotificationCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleClick = () => {
-    navigate('/login');
-  };
+  const handleClick = () => navigate('/login');
+  const handleBillList = () => navigate("/billList");
+  const handleProfile = () => navigate("/profile");
+  const handleUploadBill = () => navigate("/billType");
+  const handleHistory = () => navigate("/history");
+  const handleLogo = () => navigate("/");
+  const handleNotification = () => navigate("/notification");
+  const handleAnalytics = () => navigate("/analytics");
+  const toggleMobileMenu = () => setIsMobileMenuOpen(prev => !prev);
 
-  const handleBillList = () => {
-    navigate("/billList");
-  };
-
-  const handleProfile = () => {
-    navigate("/profile");
-  };
-
-  const handleUploadBill = () => {
-    navigate("/billType");
-  };
-
-  const handleHistory = () => {
-    navigate("/history");
-  }
-
-  const handleLogo = () => {
-    navigate("/");
-  };
-
-  const handleNotification = () => {
-    navigate("/notification");
-  };
-
-  const handleAnalytics = () => {
-    navigate("/analytics");
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(prev => !prev);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchBills = async () => {
       try {
         if (!currentUser._id) return;
 
-        const response = await fetch(`https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`, {
-          method: "GET"
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch bills");
-        }
-
-        const data = await response.json();
+        const res = await fetch(`https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`);
+        const data = await res.json();
 
         const targetDate = new Date();
         targetDate.setDate(targetDate.getDate() + 4);
 
-        const filteredBills = data.data.filter(bill => {
+        const dueSoon = data.data.filter(bill => {
           const dueDate = new Date(bill.dueDate);
           return (
-            bill.paymentStatus !== true &&
+            !bill.paymentStatus &&
             dueDate.getFullYear() === targetDate.getFullYear() &&
             dueDate.getMonth() === targetDate.getMonth() &&
             dueDate.getDate() === targetDate.getDate()
-          );  
+          );
         });
 
-        setNotificationCount(filteredBills.length);
+        setNotificationCount(dueSoon.length);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching bills:", err);
       }
     };
 
@@ -85,41 +61,135 @@ const Header = () => {
   }, [currentUser._id]);
 
   return (
-    <header className="p-4 sm:p-8 bg-white shadow-lg">
-      <div className="flex justify-between items-center">
-        <div onClick={handleLogo} className="text-3xl sm:text-4xl font-bold text-red-800 cursor-pointer pr-6">
-          BillStack
-        </div>
+     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-r bg-gray-800 text-gray-300 shadow-lg py-2' : 'bg-gradient-to-r bg-gray-800 text-gray-300  shadow-md py-4'}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
+          <div 
+            onClick={handleLogo} 
+            className="text-2xl md:text-3xl font-bold text-white cursor-pointer hover:text-indigo-100 transition-colors duration-200 flex items-center"
+          >
+            <span className="bg-white text-indigo-900 px-2 py-1 rounded mr-2 font-extrabold">Bill</span>
+            <span className="font-extrabold">Stack</span>
+          </div>
 
-        <div className="sm:hidden" onClick={toggleMobileMenu}>
-          {isMobileMenuOpen ? <FaTimes size={25} /> : <FaBars size={30} />}
-        </div>
-
-        {/* Merged Navigation */}
-        <nav className={`sm:flex ${isMobileMenuOpen ? 'block' : 'hidden'} sm:block transition-all duration-300`}>
-          <ul className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 text-red-800 font-medium">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-6">
             {currentUser._id ? (
               <>
-                <li onClick={handleUploadBill} className="hover:text-red-600">Upload Bill</li>
-                <li onClick={handleBillList} className="hover:text-red-600">Bill List</li>
-                <li onClick={handleAnalytics} className="hover:text-red-600">Analytics</li>
-                {/* <li onClick={handleHistory} className="hover:text-red-600">Expense History</li> */}
-                <li className="relative hover:text-red-600">
-                  <p onClick={handleNotification} className="relative cursor-pointer">
-                    <IoIosNotifications size={30} />
-                  </p>
-                </li>
-                <li className="hover:text-red-600">
-                  <p onClick={handleProfile}>{currentUser.name}</p>
-                </li>
+                <button 
+                  onClick={handleUploadBill}
+                  className="px-3 py-2 text-sm lg:text-base font-medium text-white hover:text-indigo-100 transition-colors duration-200"
+                >
+                  Upload Bill
+                </button>
+                <button 
+                  onClick={handleBillList}
+                  className="px-3 py-2 text-sm lg:text-base font-medium text-white hover:text-indigo-100 transition-colors duration-200"
+                >
+                  Bill List
+                </button>
+                <button 
+                  onClick={handleAnalytics}
+                  className="px-3 py-2 text-sm lg:text-base font-medium text-white hover:text-indigo-100 transition-colors duration-200"
+                >
+                  Analytics
+                </button>
+
+                <button 
+                  onClick={handleNotification}
+                  className="relative p-2 text-white hover:text-indigo-100 transition-colors duration-200"
+                >
+                  <IoIosNotifications size={24} />
+                  {notificationCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-amber-400 text-indigo-800 text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse font-bold">
+                      {notificationCount}
+                    </span>
+                  )}
+                </button>
+
+                <button 
+                  onClick={handleProfile}
+                  className="flex items-center space-x-2 px-3 py-2 text-sm lg:text-base font-medium text-white hover:text-indigo-100 transition-colors duration-200"
+                >
+                  <FaUserCircle size={20} />
+                  <span>{currentUser.name}</span>
+                </button>
               </>
             ) : (
-              <li onClick={handleClick} className="hover:text-red-600">
+              <button
+                onClick={handleClick}
+                className="px-4 py-2 bg-white text-indigo-600 rounded-md hover:bg-indigo-100 hover:text-indigo-700 transition-colors duration-200 text-sm lg:text-base font-medium shadow-lg"
+              >
                 Sign In
-              </li>
+              </button>
             )}
-          </ul>
-        </nav>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            {currentUser._id && (
+              <button 
+                onClick={handleNotification}
+                className="relative p-2 mr-2 text-white hover:text-indigo-100"
+              >
+                <IoIosNotifications size={24} />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-amber-400 text-indigo-800 text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {notificationCount}
+                  </span>
+                )}
+              </button>
+            )}
+            <button 
+              onClick={toggleMobileMenu}
+              className="text-white hover:text-indigo-100 focus:outline-none"
+            >
+              {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden mt-4 pb-4 space-y-3">
+            {currentUser._id ? (
+              <>
+                <button 
+                  onClick={handleUploadBill}
+                  className="block w-full text-left px-4 py-3 text-white hover:bg-indigo-400/20 hover:text-white rounded-md transition-colors duration-200 font-medium"
+                >
+                  Upload Bill
+                </button>
+                <button 
+                  onClick={handleBillList}
+                  className="block w-full text-left px-4 py-3 text-white hover:bg-indigo-400/20 hover:text-white rounded-md transition-colors duration-200 font-medium"
+                >
+                  Bill List
+                </button>
+                <button 
+                  onClick={handleAnalytics}
+                  className="block w-full text-left px-4 py-3 text-white hover:bg-indigo-400/20 hover:text-white rounded-md transition-colors duration-200 font-medium"
+                >
+                  Analytics
+                </button>
+                <button 
+                  onClick={handleProfile}
+                  className="flex items-center space-x-2 w-full text-left px-4 py-3 text-white hover:bg-indigo-400/20 hover:text-white rounded-md transition-colors duration-200 font-medium"
+                >
+                  <FaUserCircle size={18} />
+                  <span>{currentUser.name}</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleClick}
+                className="w-full px-4 py-3 bg-white text-indigo-600 rounded-md hover:bg-indigo-100 hover:text-indigo-700 transition-colors duration-200 text-center font-medium shadow-lg"
+              >
+                Sign In
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

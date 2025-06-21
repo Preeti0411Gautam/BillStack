@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { CgProfile } from "react-icons/cg";
 import { useSelector, useDispatch } from 'react-redux';
-
 import {
   updateUserStart,
   updateUserFailure,
@@ -14,7 +13,6 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [updationSuccess, setUpdationSuccess] = useState(null);
   const [updationError, setUpdationError] = useState(null);
-
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -46,10 +44,10 @@ const Profile = () => {
         dispatch(updateUserFailure(data));
         setUpdationError(data.message);
         return;
-      } else {
-        dispatch(updateUserSuccess(data));
-        setUpdationSuccess("User's profile updated successfully");
       }
+
+      dispatch(updateUserSuccess(data));
+      setUpdationSuccess("Profile updated successfully!");
     } catch (err) {
       dispatch(updateUserFailure(err.message));
       setUpdationError(err.message);
@@ -58,10 +56,7 @@ const Profile = () => {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch(`https://billstack.onrender.com/api/user/signout`, {
-        method: 'POST',
-      });
-
+      const res = await fetch(`https://billstack.onrender.com/api/user/signout`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message);
@@ -72,107 +67,97 @@ const Profile = () => {
       console.log(err.message);
     }
   };
- 
 
   const handleDelete = async () => {
-    console.log(currentUser)
     try {
       const res = await fetch(`https://billstack.onrender.com/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
-  
+
       if (!res.ok) {
         const data = await res.json();
-        console.error(`Error ${res.status}: ${data.message || 'An error occurred'}`);
-        alert(data.message || 'Failed to delete user. Please try again.');
+        alert(data.message || 'Failed to delete user.');
         return;
       }
-  
-      // If the API call is successful
-      alert('User deleted successfully');
+
+      alert('Account deleted successfully.');
       dispatch(signoutSuccess());
     } catch (err) {
-      console.error('Network error:', err.message);
-      alert('Network error. Please check your connection and try again.');
+      alert('Network error. Please try again.');
     }
   };
-  
-  
-  return (
-    <div className="flex flex-col items-center min-h-screen py-8">
-      <div className="bg-white rounded-lg p-6 w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center text-red-800">Profile</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-lg border p-6 sm:p-10 w-full"
-        >
-          <div className="flex justify-center mb-7">
-            <CgProfile size={100} className="text-red-800" />
-          </div>
 
-          <div className="mb-8">
-            <label className="block font-semibold mb-4 text-xl">Username</label>
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-xl bg-white shadow-2xl rounded-2xl p-8 sm:p-10">
+        <div className="flex flex-col items-center text-gray-800 mb-8">
+          <CgProfile size={80} />
+          <h1 className="text-3xl font-bold mt-2">Your Profile</h1>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-lg font-semibold mb-2">Username</label>
             <input
-              defaultValue={currentUser.username}
               type="text"
               name="username"
-              placeholder="Username"
+              defaultValue={currentUser.username}
+              placeholder="Enter username"
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-800"
+              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-800"
             />
           </div>
 
-          <div className="mb-8">
-            <label className="block font-semibold mb-4 text-xl">Email</label>
+          <div>
+            <label className="block text-lg font-semibold mb-2">Email</label>
             <input
-              defaultValue={currentUser.email}
               type="email"
               name="email"
-              placeholder="Email"
+              defaultValue={currentUser.email}
+              placeholder="Enter email"
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-800"
+              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-800"
             />
           </div>
 
-          <div className="mb-8">
-            <label className="block font-semibold mb-4 text-xl">Password</label>
+          <div>
+            <label className="block text-lg font-semibold mb-2">Password</label>
             <input
               type="password"
               name="password"
-              placeholder="*********"
+              placeholder="********"
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-800"
+              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-gray-800"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-red-800 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200"
+            className="w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition duration-200"
           >
-            Update
+            Update Profile
           </button>
         </form>
 
         {updationSuccess && (
-          <p className="mt-5 text-green-600 font-semibold">{updationSuccess}</p>
+          <p className="mt-6 text-green-600 font-medium text-center">
+            ✅ {updationSuccess}
+          </p>
         )}
         {updationError && (
-          <p className="mt-5 text-red-600 font-semibold">{updationError}</p>
+          <p className="mt-6 text-red-600 font-medium text-center">
+            ❌ {updationError}
+          </p>
         )}
 
-        <div className="text-red-800 font-bold text-lg flex justify-between mt-8">
-          <span 
-          onClick={handleDelete}
-          className="hover:underline mr-10 cursor-pointer">Delete Account</span>
-          <span
-            onClick={handleSignout}
-            className="hover:underline ml-10 cursor-pointer"
-          >
-            Sign out
-          </span>
+        <div className="flex justify-between items-center mt-10 text-gray-800 font-semibold text-md sm:text-base">
+          <button onClick={handleDelete} className="hover:underline">
+            ❌ Delete Account
+          </button>
+          <button onClick={handleSignout} className="hover:underline">
+            🚪 Sign Out
+          </button>
         </div>
       </div>
     </div>

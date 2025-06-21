@@ -208,7 +208,7 @@ const Analytics = () => {
                 <Line options={options} data={chartData} />
               </div>
             ) : (
-              <p className="text-center text-lg text-gray-500">
+              <p className="text-center text-lg text-gray-600">
                 No data available for analytics.
               </p>
             )}
