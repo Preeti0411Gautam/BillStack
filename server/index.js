@@ -27,7 +27,7 @@ uploadBillNotifer();
 // import cors from 'cors';
 
 const corsOptions = {
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: '*', // Your frontend URL
   credentials: true, // Allow cookies and credentials
 };
 
