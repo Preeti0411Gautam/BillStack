@@ -28,7 +28,7 @@ const BillList = () => {
       setErrorMessage(null);
 
       const res = await fetch(
-        `/api/bill/getBillByTypes/${type}?userId=${currentUser._id}`,
+        `https://billstack.onrender.com/api/bill/getBillByTypes/${type}?userId=${currentUser._id}`,
         {
           method: "GET",
         }

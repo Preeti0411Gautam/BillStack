@@ -56,7 +56,7 @@ const BillType = () => {
       formWithUserId.append("paymentStatus" ,paymentStatus ?"true" :"false");
 
 
-      const res = await fetch(`/api/bill/upload`, {
+      const res = await fetch(`https://billstack.onrender.com/api/bill/upload`, {
         method: "POST",
         body: formWithUserId,
       });

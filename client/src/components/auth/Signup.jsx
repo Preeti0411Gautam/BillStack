@@ -27,7 +27,7 @@ const Signup = () => {
 
       setLoading(true);
       setErrorMessage(null);
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("https://billstack.onrender.com/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

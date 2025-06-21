@@ -28,7 +28,7 @@ const Login = () => {
     try {
       dispatch(signInStart());
 
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("https://billstack.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

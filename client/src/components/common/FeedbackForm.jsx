@@ -35,7 +35,7 @@ const FeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/feedback/upload/${currentUser._id}`, {
+      const res = await fetch(`https://billstack.onrender.com/api/feedback/upload/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

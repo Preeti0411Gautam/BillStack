@@ -34,7 +34,7 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
 
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`https://billstack.onrender.com/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -58,7 +58,7 @@ const Profile = () => {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch(`/api/user/signout`, {
+      const res = await fetch(`https://billstack.onrender.com/api/user/signout`, {
         method: 'POST',
       });
 
@@ -77,7 +77,7 @@ const Profile = () => {
   const handleDelete = async () => {
     console.log(currentUser)
     try {
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`https://billstack.onrender.com/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

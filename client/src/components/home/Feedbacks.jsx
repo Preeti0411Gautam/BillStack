@@ -21,7 +21,7 @@ const Feedbacks = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const res = await fetch("/api/feedback/feedbacks");
+        const res = await fetch("https://billstack.onrender.com/api/feedback/feedbacks");
         const data = await res.json();
         if (data.success) setFeedbacks(data.feedbacks);
         else console.log(data.message);

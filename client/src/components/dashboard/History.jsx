@@ -10,7 +10,7 @@ const History = () => {
   // Function to fetch payment history
   const fetchPaymentHistory = async () => {
     try {
-      const res = await fetch(`/api/payment/history/${currentUser._id}`, {
+      const res = await fetch(`https://billstack.onrender.com/api/payment/history/${currentUser._id}`, {
         method: "GET",
       });
       const data = await res.json();

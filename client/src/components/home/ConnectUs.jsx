@@ -13,7 +13,7 @@ const ConnectUs = () => {
         e.preventDefault();
         const { name, email, message } = formData;
         try {
-            const res = await fetch(`/api/contact-us/upload`, {
+            const res = await fetch(`https://billstack.onrender.com/api/contact-us/upload`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

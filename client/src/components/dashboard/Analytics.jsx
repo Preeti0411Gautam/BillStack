@@ -49,7 +49,7 @@ const Analytics = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `/api/bill/getBillByUserId/${currentUser._id}`,
+        `https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`,
         { method: "GET" }
       );
       if (!response.ok) throw new Error("Network response was not ok");

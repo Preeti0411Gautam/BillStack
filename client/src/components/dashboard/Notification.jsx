@@ -14,7 +14,7 @@ const Notification = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/bill/getBillByUserId/${currentUser._id}`, {
+      const response = await fetch(`https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`, {
         method: "GET",
       });
 
