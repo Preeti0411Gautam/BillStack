@@ -63,9 +63,7 @@ const Feedbacks = () => {
       </h2>
 
       {feedbacks.length === 0 ? (
-        <p className="text-center text-gray-500 text-xl">
-          No feedbacks available...
-        </p>
+        ''
       ) : (
         <div className="relative">
           {/* Carousel Viewport */}
