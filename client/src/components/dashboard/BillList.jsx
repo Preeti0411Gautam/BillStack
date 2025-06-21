@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import {useState } from "react";
 import { useSelector } from "react-redux";
 
 const BillList = () => {
@@ -53,32 +53,36 @@ const BillList = () => {
     fetchBillByType(type);
   };
 
+
+  /*
   const loadRazorpayScript = (src) => {
     return new Promise((resolve) => {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = src;
       script.onload = () => resolve(true);
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
-  }
+  };
 
   useEffect(() => {
-    loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js')
-  }, [])
+    loadRazorpayScript("https://checkout.razorpay.com/v1/checkout.js");
+  }, []);
+
+
 
   const paymentHandler = async (bill) => {
     try {
       const options = {
         billId: bill._id,
-        amount: bill.amount
-      }
+        amount: bill.amount,
+      };
       const response = await fetch(`/api/payment/createOrder`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(options)
+        body: JSON.stringify(options),
       });
       const data = await response.json();
 
@@ -91,41 +95,48 @@ const BillList = () => {
             order_id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
             signature: response.razorpay_signature,
-            billId :bill._id,  
-            userId: currentUser._id
-          }
+            billId: bill._id,
+            userId: currentUser._id,
+          };
           fetch(`/api/payment/verifyPayment`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify(options2)
-          }).then(res => res.json())
-            .then(data => {
+            body: JSON.stringify(options2),
+          })
+            .then((res) => res.json())
+            .then((data) => {
               if (data.success) {
                 alert("Payment Successful");
               } else {
                 alert("Payment Failed");
               }
-            })
-        }
-      })
+            });
+        },
+      });
 
       paymentObject.open();
     } catch (error) {
       console.log("Error creating order or initiating payment:", error);
     }
-  }
+  };
 
+
+  */
   return (
     <div className="flex flex-col items-center justify-start min-h-screen pt-5 px-4 sm:px-6">
-      <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">Bill Types</h1>
+      <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">
+        Bill Types
+      </h1>
       <ul className="flex flex-wrap justify-center space-x-4 mb-10">
         {list.map((item) => (
           <li key={item.id}>
             <button
               className={`border-2 rounded-lg px-4 py-2 font-semibold font-mono transition duration-300 ${
-                selectedBillType === item.type ? "bg-red-800 text-white border-red-800" : "bg-white text-gray-800 hover:bg-gray-200"
+                selectedBillType === item.type
+                  ? "bg-red-800 text-white border-red-800"
+                  : "bg-white text-gray-800 hover:bg-gray-200"
               }`}
               onClick={() => handleButtonClick(item.type)}
               disabled={loading}
@@ -144,7 +155,9 @@ const BillList = () => {
             Please sign in to view your bill list...
           </p>
         ) : loading ? (
-          <p className="text-gray-400 font-semibold text-2xl">Loading bills...</p>
+          <p className="text-gray-400 font-semibold text-2xl">
+            Loading bills...
+          </p>
         ) : errorMessage ? (
           <p className="text-red-500 font-semibold text-2xl">{errorMessage}</p>
         ) : filteredBills.length > 0 ? (
@@ -170,8 +183,7 @@ const BillList = () => {
                   </p>
                   <p className="mb-2">
                     <strong>Due Date:</strong>{" "}
-                    {new Date(bill.dueDate).toLocaleDateString()
-                    }
+                    {new Date(bill.dueDate).toLocaleDateString()}
                     {/* {console.log(bill)} */}
                   </p>
                   <div className="flex items-center space-x-2 mt-4">
@@ -181,12 +193,13 @@ const BillList = () => {
                     ) : (
                       <div className="flex items-center space-x-4">
                         <span className="text-red-800 font-semibold">Unpaid</span>
-                        <button
+                        {/* <button
                           className="px-4 py-2 bg-green-500 border rounded-lg text-white hover:bg-green-600 transition duration-300"
                           onClick={() => paymentHandler(bill)}
                         >
                           Pay Now
-                        </button>
+                        </button> */}
+                      
                       </div>
                     )}
                   </div>

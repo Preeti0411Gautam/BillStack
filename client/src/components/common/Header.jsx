@@ -72,7 +72,7 @@ const Header = () => {
             dueDate.getFullYear() === targetDate.getFullYear() &&
             dueDate.getMonth() === targetDate.getMonth() &&
             dueDate.getDate() === targetDate.getDate()
-          );
+          );  
         });
 
         setNotificationCount(filteredBills.length);
@@ -103,15 +103,10 @@ const Header = () => {
                 <li onClick={handleUploadBill} className="hover:text-red-600">Upload Bill</li>
                 <li onClick={handleBillList} className="hover:text-red-600">Bill List</li>
                 <li onClick={handleAnalytics} className="hover:text-red-600">Analytics</li>
-                <li onClick={handleHistory} className="hover:text-red-600">Expense History</li>
+                {/* <li onClick={handleHistory} className="hover:text-red-600">Expense History</li> */}
                 <li className="relative hover:text-red-600">
                   <p onClick={handleNotification} className="relative cursor-pointer">
                     <IoIosNotifications size={30} />
-                    {notificationCount > 0 && (
-                      <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        {notificationCount}
-                      </span>
-                    )}
                   </p>
                 </li>
                 <li className="hover:text-red-600">

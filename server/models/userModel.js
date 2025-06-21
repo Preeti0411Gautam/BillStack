@@ -24,6 +24,12 @@ import mongoose from "mongoose";
     lowercase: true,
     unique:true
   },
+  familyMembers: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }
+]
   
 },
  {

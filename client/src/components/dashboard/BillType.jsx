@@ -16,9 +16,9 @@ const BillType = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(false);
 
-  const handlePaymentStatusChange = (event) => {
-    setPaymentStatus(event.target.checked);
-  };
+  // const handlePaymentStatusChange = (event) => {
+  //   setPaymentStatus(event.target.checked);
+  // };
   
 
 

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Loading from "./Loading";
 import PrivateRoute from "./PrivateRoute";
+import NotFound from "../components/common/NotFound";
 
 // Lazy load all route components
 const Home = lazy(() => import("../components/home/Home"));
@@ -11,7 +12,7 @@ const UploadBill = lazy(() => import("../components/dashboard/UploadBill"));
 const BillType = lazy(() => import("../components/dashboard/BillType"));
 const Notification = lazy(() => import("../components/dashboard/Notification"));
 const Analytics = lazy(() => import("../components/dashboard/Analytics"));
-const History = lazy(() => import("../components/dashboard/History"));
+// const History = lazy(() => import("../components/dashboard/History"));
 const BillList = lazy(() => import("../components/dashboard/BillList"));
 
 const Profile = lazy(() =>import("../components/dashboard/Profile"));
@@ -30,6 +31,7 @@ const AppRoutes = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
+
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -37,11 +39,12 @@ const AppRoutes = () => {
         <Route path="/billType" element={<BillType />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/analytics" element={<Analytics />} />
-        <Route path="/history" element={<History />} />
+        {/* <Route path="/history" element={<History />} /> */}
         <Route path="/billList" element={<BillList />} />
-
+        
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
+           <Route path="*" element={<NotFound/>} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

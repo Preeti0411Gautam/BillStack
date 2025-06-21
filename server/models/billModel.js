@@ -34,7 +34,13 @@ const billSchema = new mongoose.Schema({
   billGeneratedDate: {
     type: Date,
     required: true
-  }
+  },
+ 
+   sharedWith: [{
+     type: mongoose.Schema.Types.ObjectId, 
+     ref: 'User' 
+    }],
+
 }, {
   timestamps: true  
 });

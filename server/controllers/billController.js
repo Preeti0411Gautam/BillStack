@@ -1,6 +1,8 @@
 import Bill from "../models/billModel.js";
 import uploadOnCloudinary from '../utils/cloudinary.js';
 import fs from "fs";
+import transporter from "../services/mailer.js";
+
 
 export const uploadBill = async (req, res) => {
 
@@ -179,6 +181,5 @@ export const deleteBill = async(req, res)=>{
         });
     }
 }
-
 
 

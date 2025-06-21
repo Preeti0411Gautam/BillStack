@@ -18,6 +18,7 @@ import billRoutes from "./routes/billRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import contactUsRoutes from "./routes/contactUsRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js"
+// import notificationRoute from "./routes/notificationRoute.js"
 app.use(bodyParser.json());
 import cors  from "cors";
 
@@ -43,11 +44,12 @@ app.use('/api/auth',authRoutes);
 app.use('/api/feedback' ,feedbackRoutes);
 app.use('/api/contact-us', contactUsRoutes);
 app.use('/api/payment' ,paymentRoutes);
+// app.use("/api/notifications", notificationRoute);
 
 app.get('/', (req, res)=>{
     res.json({
         success:true,
-        message:"GET METHODDDDD"
+        message:"Hello There!!"
     })
 })
 const PORT=process.env.PORT || 8000
