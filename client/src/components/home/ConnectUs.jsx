@@ -77,7 +77,7 @@ const ConnectUs = () => {
               type="text"
               placeholder="Name"
               required
-              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 outline-none text-base sm:text-lg"
+              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 outline-none text-base sm:text-lg"
             />
             <input
               name="email"
@@ -87,7 +87,7 @@ const ConnectUs = () => {
               type="email"
               placeholder="Email"
               required
-              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 outline-none text-base sm:text-lg"
+              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 outline-none text-base sm:text-lg"
             />
             <textarea
               name="message"
@@ -97,7 +97,7 @@ const ConnectUs = () => {
               placeholder="Message"
               rows="5"
               required
-              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-indigo-400 outline-none text-base sm:text-lg"
+              className="w-full p-3 sm:p-4 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-gray-400 outline-none text-base sm:text-lg"
             ></textarea>
 
             <button

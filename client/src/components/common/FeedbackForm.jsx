@@ -105,7 +105,7 @@ const FeedbackForm = () => {
               value={formData.feedback}
               placeholder="Share your feedback here..."
               onChange={handleChange}
-              className="w-full p-4 border border-indigo-400 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
+              className="w-full p-4 border border-gray-400 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-500 text-gray-700"
               required
             ></textarea>
           </div>
@@ -116,7 +116,7 @@ const FeedbackForm = () => {
             className={`w-full py-3 px-6 rounded-lg text-base sm:text-lg font-semibold transition duration-300 ${
               rating === 0
                 ? 'bg-gradient-to-r from-gray-700 to-gray-600 cursor-not-allowed text-white'
-                : 'bg-gradient-to-r from-gray-700 to-gray-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                : 'bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-700 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
             }`}
           >
             Share My Feedback
