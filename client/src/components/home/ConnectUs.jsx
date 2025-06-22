@@ -104,7 +104,7 @@ const ConnectUs = () => {
               type="submit"
               disabled={isSubmitting}
               className={`w-full bg-gray-700 text-white font-semibold py-3 sm:py-3.5 rounded-md shadow hover:shadow-lg transition-all duration-200 ${
-                isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-indigo-700'
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-700'
               }`}
             >
               {isSubmitting ? 'Sending...' : 'Send Message'}
