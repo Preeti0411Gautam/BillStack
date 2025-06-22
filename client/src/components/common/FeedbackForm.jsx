@@ -13,8 +13,10 @@ const StarRating = ({ rating, setRating }) => {
         <span
           key={index}
           onClick={() => handleClick(index)}
-          className={`cursor-pointer text-3xl sm:text-4xl transition duration-200 ${
-            index < rating ? 'text-amber-400 hover:scale-125' : 'text-gray-400 hover:text-amber-200'
+          className={`cursor-pointer text-2xl sm:text-3xl md:text-4xl transition duration-200 ${
+            index < rating
+              ? 'text-amber-400 hover:scale-125'
+              : 'text-gray-400 hover:text-amber-200'
           }`}
         >
           &#9733;
@@ -39,9 +41,7 @@ const FeedbackForm = () => {
     try {
       const res = await fetch(`https://billstack.onrender.com/api/feedback/upload/${currentUser._id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           userId: currentUser._id,
@@ -63,52 +63,49 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="sm:py-16 px-6  min-h-[90vh]">
-      {/* Success Message */}
+    <div className="py-10 sm:py-16 px-4 sm:px-8 md:px-12 lg:px-20">
+      {/* Toast Message */}
       {isSubmitted && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fade-in">
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fade-in text-sm sm:text-base">
           <IoCheckmarkDoneCircle className="mr-2 text-xl" />
           Feedback submitted successfully!
         </div>
       )}
 
-      {/* Feedback Section */}
-      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row bg-white rounded-2xl  border border-indigo-100 overflow-hidden">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row bg-white rounded-2xl border border-indigo-100 overflow-hidden shadow-md">
         {/* Left Side */}
-        <div className="sm:w-1/2 bg-gradient-to-br from-yellow-50 via-gray-200 to-white p-8 sm:p-12 flex flex-col justify-center text-left">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">
+        <div className="w-full lg:w-1/2 bg-gradient-to-br from-yellow-50 via-gray-200 to-white p-6 sm:p-10 md:p-12 flex flex-col justify-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             We Value Your Opinion{currentUser?.name ? `, ${currentUser.name}` : ''}
           </h1>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-700">
             Your feedback helps us improve and serve you better. Please take a moment to share your thoughts.
           </p>
-        
         </div>
 
         {/* Right Side (Form) */}
         <form
           onSubmit={handleSubmit}
-          className="sm:w-1/2 w-full bg-white p-6 sm:p-10 transition-all duration-300"
+          className="w-full lg:w-1/2 bg-white p-6 sm:p-10 space-y-6"
         >
-          <div className="mb-2">
-            <label className="block font-semibold text-lg sm:text-xl text-gray-800 mb-3">
+          <div>
+            <label className="block font-semibold text-base sm:text-lg text-gray-800 mb-2">
               How would you rate your overall experience?
             </label>
             <StarRating rating={rating} setRating={setRating} />
           </div>
 
-          <div className="mb-4">
-            <label className="block font-semibold text-lg sm:text-xl text-gray-800 mb-2">
+          <div>
+            <label className="block font-semibold text-base sm:text-lg text-gray-800 mb-2">
               Kindly take a moment to tell us what you think
             </label>
             <textarea
               id="feedback"
-              name="feedback"
               rows="5"
               value={formData.feedback}
               placeholder="Share your feedback here..."
               onChange={handleChange}
-              className="w-full p-4 border border-indigo-400 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-700"
+              className="w-full p-4 border border-indigo-400 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
               required
             ></textarea>
           </div>
@@ -116,9 +113,9 @@ const FeedbackForm = () => {
           <button
             type="submit"
             disabled={rating === 0}
-            className={`w-full py-3 px-6 rounded-lg text-lg font-semibold transition duration-300 ${
+            className={`w-full py-3 px-6 rounded-lg text-base sm:text-lg font-semibold transition duration-300 ${
               rating === 0
-                ? 'bg-gradient-to-r from-gray-700 to-gray-600 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-gray-700 to-gray-600 cursor-not-allowed text-white'
                 : 'bg-gradient-to-r from-gray-700 to-gray-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
             }`}
           >
@@ -127,7 +124,7 @@ const FeedbackForm = () => {
         </form>
       </div>
 
-      {/* Custom Animation for Success Toast */}
+      {/* Animation for Toast */}
       <style jsx>{`
         @keyframes fadeIn {
           from {
