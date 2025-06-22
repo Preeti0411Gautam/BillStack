@@ -16,6 +16,7 @@ const BillList = () => {
   const [selectedBillType, setSelectedBillType] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [viewImage, setViewImage] = useState(null); // 🆕 For modal view
 
   const fetchBillByType = async (type) => {
     if (!currentUser) {
@@ -134,9 +135,34 @@ const BillList = () => {
                       {bill.paymentStatus ? "Paid" : "Unpaid"}
                     </span>
                   </div>
+                  <button
+                    onClick={() => setViewImage(bill.billImage)}
+                    className="mt-3 text-sm font-semibold text-blue-800 px-3 py-1 rounded-full bg-blue-200"
+                  >
+                    View Bill
+                  </button>
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* 🖼️ View Bill Modal */}
+        {viewImage && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+            <div className="relative max-w-3xl w-full px-4">
+              <button
+                onClick={() => setViewImage(null)}
+                className="absolute top-2 right-2 text-white text-3xl hover:text-red-400"
+              >
+                &times;
+              </button>
+              <img
+                src={viewImage}
+                alt="Bill Full View"
+                className="w-full max-h-[80vh] object-contain rounded-lg shadow-lg"
+              />
+            </div>
           </div>
         )}
       </div>

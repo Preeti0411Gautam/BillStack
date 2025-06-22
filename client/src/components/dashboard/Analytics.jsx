@@ -27,30 +27,22 @@ ChartJS.register(
 const Analytics = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useSelector((state) => state.user);
   const [monthlyTotals, setMonthlyTotals] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears, setAvailableYears] = useState([]);
+
+  const { currentUser } = useSelector((state) => state.user);
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
   ];
 
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`,
-        { method: "GET" }
+        `https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
@@ -63,28 +55,35 @@ const Analytics = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const data = await fetchUserData();
-        // Filter bills where paymentStatus is true if needed
-        // const validBills = data.filter((bill) => bill.paymentStatus === true);
-        const validBills = data;
 
-        // Initialize monthly totals for each bill type
-        const monthlyData = months.map((month, index) => {
-          return {
-            month: month,
-            Internet: 0,
-            Electricity: 0,
-            Water: 0,
-            Gas: 0,
-            Other: 0,
-            Rent: 0,
-          };
-        });
+        // Extract available years from bills
+        const years = Array.from(
+          new Set(data.map((bill) => new Date(bill.dueDate).getFullYear()))
+        ).sort((a, b) => b - a);
+        setAvailableYears(years);
 
-        // Calculate monthly totals for each bill type
+        // Filter bills by selected year
+        const validBills = data.filter(
+          (bill) =>
+            new Date(bill.dueDate).getFullYear() === Number(selectedYear)
+        );
+
+        const monthlyData = months.map((month) => ({
+          month,
+          Internet: 0,
+          Electricity: 0,
+          Water: 0,
+          Gas: 0,
+          Other: 0,
+          Rent: 0,
+        }));
+
         validBills.forEach((bill) => {
           const monthIndex = new Date(bill.dueDate).getMonth();
+          
           if (monthIndex >= 0 && monthIndex < 12) {
             monthlyData[monthIndex][bill.billType] += bill.amount;
           }
@@ -92,7 +91,6 @@ const Analytics = () => {
 
         setMonthlyTotals(monthlyData);
 
-        // Calculate total expenses across all months
         const total = monthlyData.reduce((sum, monthData) => {
           return (
             sum +
@@ -103,31 +101,28 @@ const Analytics = () => {
         }, 0);
         setTotalExpenses(total);
 
-        // Prepare chart data
         const billTypes = ["Internet", "Electricity", "Water", "Gas", "Other", "Rent"];
-        const datasets = billTypes.map((type) => {
-          const colorMap = {
-            Internet: "#8FD14F",
-            Electricity: "#EF5A6F",
-            Water: "#478CCF",
-            Gas: "#F96E2A",
-            Other: "#37B7C3",
-            Rent: "#FF76CE",
-          };
+        const colorMap = {
+          Internet: "#8FD14F",
+          Electricity: "#EF5A6F",
+          Water: "#478CCF",
+          Gas: "#F96E2A",
+          Other: "#37B7C3",
+          Rent: "#FF76CE",
+        };
 
-          return {
-            label: type,
-            data: monthlyData.map((month) => month[type]),
-            borderColor: colorMap[type],
-            backgroundColor: `${colorMap[type]}40`, // Add opacity
-            borderWidth: 3,
-            fill: true,
-            pointStyle: "circle",
-            pointRadius: 5,
-            pointHoverRadius: 8,
-            tension: 0.3,
-          };
-        });
+        const datasets = billTypes.map((type) => ({
+          label: type,
+          data: monthlyData.map((month) => month[type]),
+          borderColor: colorMap[type],
+          backgroundColor: `${colorMap[type]}40`,
+          borderWidth: 3,
+          fill: true,
+          pointStyle: "circle",
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          tension: 0.3,
+        }));
 
         setChartData({
           labels: months,
@@ -140,8 +135,8 @@ const Analytics = () => {
       }
     };
 
-    fetchData();
-  }, [currentUser]);
+    if (currentUser) fetchData();
+  }, [currentUser, selectedYear]);
 
   const options = {
     responsive: true,
@@ -149,7 +144,7 @@ const Analytics = () => {
     plugins: {
       title: {
         display: true,
-        text: "Monthly Bills Analytics",
+        text: `Monthly Bills Analytics (${selectedYear})`,
         font: { size: 24 },
         color: "#1F2937",
       },
@@ -177,9 +172,7 @@ const Analytics = () => {
       },
       y: {
         title: { display: true, text: "Amount (INR)", color: "#4B5563" },
-        grid: {
-          color: "rgba(200, 200, 200, 0.2)",
-        },
+        grid: { color: "rgba(200, 200, 200, 0.2)" },
       },
     },
   };
@@ -200,11 +193,26 @@ const Analytics = () => {
         </div>
       ) : (
         <>
+          {/* Year Filter Dropdown */}
+          <div className="w-full flex justify-end mb-4">
+            <label className="text-gray-800 text-xl font-medium mr-2">Year:</label>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="border border-gray-800 px-3 py-1 rounded-md text-md text-gray-800 font-semibold"
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Chart */}
           <div className="w-full lg:max-w-4xl p-6">
             {chartData ? (
-              <div
-                style={{ position: "relative", width: "100%", height: "400px" }}
-              >
+              <div style={{ position: "relative", width: "100%", height: "400px" }}>
                 <Line options={options} data={chartData} />
               </div>
             ) : (
@@ -213,45 +221,29 @@ const Analytics = () => {
               </p>
             )}
           </div>
+
+          {/* Table */}
           <div className="w-full lg:max-w-4xl bg-white shadow-xl rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              Monthly Breakdown
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Monthly Breakdown</h2>
             <p className="text-lg text-gray-600 mb-6">
               Total Expenses Across All Months:{" "}
               <span className="text-red-500 font-semibold">
                 ₹{totalExpenses.toFixed(2)}
               </span>
             </p>
-            
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Month
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Internet
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Electricity
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Water
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Gas
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Other
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Rent
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Total
-                    </th>
+                    {["Month", "Internet", "Electricity", "Water", "Gas", "Other", "Rent", "Total"].map((header) => (
+                      <th
+                        key={header}
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        {header}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -259,33 +251,19 @@ const Analytics = () => {
                     const monthTotal = Object.entries(monthData)
                       .filter(([key]) => key !== "month")
                       .reduce((sum, [_, value]) => sum + value, 0);
-                    
+
                     return (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {monthData.month}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Internet.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Electricity.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Water.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Gas.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Other.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{monthData.Rent.toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                          ₹{monthTotal.toFixed(2)}
-                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Internet.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Electricity.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Water.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Gas.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Other.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Rent.toFixed(2)}</td>
+                        <td className="px-6 py-4 font-semibold text-sm text-gray-900">₹{monthTotal.toFixed(2)}</td>
                       </tr>
                     );
                   })}
