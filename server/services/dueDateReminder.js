@@ -16,7 +16,7 @@ export const  dueDateReminders = async () => {
       },
     });
 
-    console.log(`Found ${bills.length} bill(s) due in next 1–4 days`);
+    // console.log(`Found ${bills.length} bill(s) due in next 1–4 days`);
 
     for (const bill of bills) {
       const user = await User.findById(bill.userId);
@@ -63,7 +63,7 @@ const mailOptions = {
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${user.email} (due in ${daysLeft} day(s))`);
+        // console.log(`Email sent to ${user.email} (due in ${daysLeft} day(s))`);
       } catch (err) {
         console.error(`Email failed for ${user.email}:`, err.message);
       }

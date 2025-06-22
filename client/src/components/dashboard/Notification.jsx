@@ -20,8 +20,8 @@ const Notification = () => {
         
         // Fetch both types of notifications in parallel
         const [dueDateRes, uploadRemindersRes] = await Promise.all([
-          fetch(`http://localhost:8000/api/notifications/due-date/${currentUser._id}`),
-          fetch(`http://localhost:8000/api/notifications/upload-reminders/${currentUser._id}`)
+          fetch(`https://billstack.onrender.com/api/notifications/due-date/${currentUser._id}`),
+          fetch(`https://billstack.onrender.com/api/notifications/upload-reminders/${currentUser._id}`)
         ]);
 
         const dueDateData = await dueDateRes.json();
