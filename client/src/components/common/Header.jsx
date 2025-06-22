@@ -16,7 +16,7 @@ const Header = () => {
   const handleBillList = () => navigate("/billList");
   const handleProfile = () => navigate("/profile");
   const handleUploadBill = () => navigate("/billType");
-  const handleHistory = () => navigate("/history");
+  // const handleHistory = () => navigate("/history");
   const handleLogo = () => navigate("/");
   const handleNotification = () => navigate("/notification");
   const handleAnalytics = () => navigate("/analytics");

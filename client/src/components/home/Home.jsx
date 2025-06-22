@@ -62,7 +62,7 @@ const Home = () => {
       </div>
 
       {/* Feedbacks Section */}
-      <div className="py-20 px-6 sm:px-10 lg:px-20 bg-white text-white">
+      <div className="px-6 sm:px-10 lg:px-20 bg-white text-white">
         <div className=" rounded-xl p-8 sm:p-10 border border-slate-200">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2 text-center">
             What Our <span className="text-amber-600">Users Say</span>
