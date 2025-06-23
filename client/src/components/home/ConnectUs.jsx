@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const ConnectUs = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -21,7 +22,7 @@ const ConnectUs = () => {
     const { name, email, message } = formData;
 
     try {
-      const res = await fetch(`https://billstack.onrender.com/api/contact-us/upload`, {
+      const res = await fetch(`${baseURL}/api/contact-us/upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, message }),

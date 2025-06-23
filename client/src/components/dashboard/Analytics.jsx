@@ -12,6 +12,8 @@ import {
   Filler,
 } from "chart.js";
 import { useSelector } from "react-redux";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
 
 ChartJS.register(
   CategoryScale,
@@ -42,7 +44,7 @@ const Analytics = () => {
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`
+        `${baseURL}/api/bill/getBillByUserId/${currentUser._id}`
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();

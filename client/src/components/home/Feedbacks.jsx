@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -39,7 +41,7 @@ const Feedbacks = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const res = await fetch("https://billstack.onrender.com/api/feedback/feedbacks");
+        const res = await fetch(`${baseURL}/api/feedback/feedbacks`);
         if (!res.ok) throw new Error("Failed to fetch feedbacks");
         
         const data = await res.json();

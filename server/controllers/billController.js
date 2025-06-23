@@ -1,7 +1,6 @@
 import Bill from "../models/billModel.js";
 import uploadOnCloudinary from '../utils/cloudinary.js';
 import fs from "fs";
-import transporter from "../services/mailer.js";
 
 
 export const uploadBill = async (req, res) => {
@@ -117,22 +116,17 @@ export const getBill =async(req,res)=>{
     if(!userId){
         return res.json({
             success: false, 
-            message: "Please provide userId"
+            message: "No bills found with this user or this user doesn't exist",
+            data:[]
         })
     }
 
     const bills = await Bill.find({userId});
     console.log(bills);
-    
-    if(bills.length===0){
-        return res.json({
-            success: false, 
-            message: "No bills found with this user or this user doesn't exist"
-        })
-    }
+
     res.status(200).json({
         success: true,
-        message:"Successfully fetched bill ",
+        message: bills.length ? "Successfully fetched bills" : "No bills found",
         data: bills
     })
  }catch(err){
@@ -140,6 +134,7 @@ export const getBill =async(req,res)=>{
     res.status(500).json({ 
         success: false, 
         message: "Internal server Error...", 
+        data:[]
     }); 
  }
 }

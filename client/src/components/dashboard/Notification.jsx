@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FaBell, FaCheckCircle, FaExclamationTriangle, FaUpload } from 'react-icons/fa';
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Notification = () => {
   const [notifications, setNotifications] = useState({
@@ -20,8 +21,8 @@ const Notification = () => {
         
         // Fetch both types of notifications in parallel
         const [dueDateRes, uploadRemindersRes] = await Promise.all([
-          fetch(`https://billstack.onrender.com/api/notifications/due-date/${currentUser._id}`),
-          fetch(`https://billstack.onrender.com/api/notifications/upload-reminders/${currentUser._id}`)
+          fetch(`${baseURL}/api/notifications/due-date/${currentUser._id}`),
+          fetch(`${baseURL}/api/notifications/upload-reminders/${currentUser._id}`)
         ]);
 
         const dueDateData = await dueDateRes.json();

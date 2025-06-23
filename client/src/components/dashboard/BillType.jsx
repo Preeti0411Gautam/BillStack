@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const BillType = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ const BillType = () => {
       formWithUserId.append("billImage", formData.billImage);
       formWithUserId.append("paymentStatus", paymentStatus ? "true" : "false");
 
-      const res = await fetch(`https://billstack.onrender.com/api/bill/upload`, {
+      const res = await fetch(`${baseURL}/api/bill/upload`, {
         method: "POST",
         body: formWithUserId,
       });

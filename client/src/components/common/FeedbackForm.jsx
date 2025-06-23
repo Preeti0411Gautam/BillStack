@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IoCheckmarkDoneCircle } from 'react-icons/io5';
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const StarRating = ({ rating, setRating }) => {
   const handleClick = (index) => {
@@ -39,7 +40,7 @@ const FeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://billstack.onrender.com/api/feedback/upload/${currentUser._id}`, {
+      const res = await fetch(`${baseURL}/api/feedback/upload/${currentUser._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -125,7 +126,7 @@ const FeedbackForm = () => {
       </div>
 
       {/* Animation for Toast */}
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

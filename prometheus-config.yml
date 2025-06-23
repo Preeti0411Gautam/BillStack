@@ -1,0 +1,7 @@
+scrape_configs:
+  - job_name: 'billstack-backend'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['backend:8000']
+    metrics_path: /metrics
+    scheme: http

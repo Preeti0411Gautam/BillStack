@@ -6,6 +6,8 @@ import {
   signInSuccess,
 } from "../../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ const Login = () => {
     try {
       dispatch(signInStart());
 
-      const response = await fetch("https://billstack.onrender.com/api/auth/login", {
+      const response = await fetch(`${baseURL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -37,7 +37,6 @@ import userRoutes from "./routes/userRoutes.js"
 import billRoutes from "./routes/billRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import contactUsRoutes from "./routes/contactUsRoutes.js";
-import paymentRoutes from "./routes/paymentRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 
 
@@ -62,7 +61,6 @@ app.use('/api/bill',billRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/feedback' ,feedbackRoutes);
 app.use('/api/contact-us', contactUsRoutes);
-app.use('/api/payment' ,paymentRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 

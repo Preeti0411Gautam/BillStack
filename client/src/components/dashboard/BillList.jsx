@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const BillList = () => {
   const list = [
@@ -29,7 +30,7 @@ const BillList = () => {
       setErrorMessage(null);
 
       const res = await fetch(
-        `https://billstack.onrender.com/api/bill/getBillByTypes/${type}?userId=${currentUser._id}`
+        `${baseURL}/api/bill/getBillByTypes/${type}?userId=${currentUser._id}`
       );
       if (res.ok) {
         const data = await res.json();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const Signup = () => {
     try {
       setLoading(true);
       setErrorMessage(null);
-      const response = await fetch("https://billstack.onrender.com/api/auth/signup", {
+      const response = await fetch(`${baseURL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

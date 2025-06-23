@@ -7,6 +7,8 @@ import {
   updateUserSuccess,
   signoutSuccess
 } from '../../redux/user/userSlice';
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -32,7 +34,7 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
 
-      const res = await fetch(`https://billstack.onrender.com/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${baseURL}/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -56,7 +58,7 @@ const Profile = () => {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch(`https://billstack.onrender.com/api/user/signout`, { method: 'POST' });
+      const res = await fetch(`${baseURL}/api/user/signout`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message);
@@ -70,7 +72,7 @@ const Profile = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`https://billstack.onrender.com/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${baseURL}/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });

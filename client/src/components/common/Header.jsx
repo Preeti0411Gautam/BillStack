@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { IoIosNotifications } from "react-icons/io";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Header = () => {
   const currentUser = useSelector(state => state.user?.currentUser || {});
@@ -16,7 +17,6 @@ const Header = () => {
   const handleBillList = () => navigate("/billList");
   const handleProfile = () => navigate("/profile");
   const handleUploadBill = () => navigate("/billType");
-  // const handleHistory = () => navigate("/history");
   const handleLogo = () => navigate("/");
   const handleNotification = () => navigate("/notification");
   const handleAnalytics = () => navigate("/analytics");
@@ -31,31 +31,38 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const fetchBills = async () => {
-      try {
-        if (!currentUser._id) return;
+ const fetchBills = async () => {
+  try {
+    if (!currentUser._id) return;
 
-        const res = await fetch(`https://billstack.onrender.com/api/bill/getBillByUserId/${currentUser._id}`);
-        const data = await res.json();
+    const res = await fetch(`${baseURL}/api/bill/getBillByUserId/${currentUser._id}`);
+    const data = await res.json();
 
-        const targetDate = new Date();
-        targetDate.setDate(targetDate.getDate() + 4);
+    // Add this safety check
+    if (!Array.isArray(data.data)) {
+      console.warn("Expected array but got:", data);
+      return;
+    }
 
-        const dueSoon = data.data.filter(bill => {
-          const dueDate = new Date(bill.dueDate);
-          return (
-            !bill.paymentStatus &&
-            dueDate.getFullYear() === targetDate.getFullYear() &&
-            dueDate.getMonth() === targetDate.getMonth() &&
-            dueDate.getDate() === targetDate.getDate()
-          );
-        });
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 4);
 
-        setNotificationCount(dueSoon.length);
-      } catch (err) {
-        console.error("Error fetching bills:", err);
-      }
-    };
+    const dueSoon = data.data.filter(bill => {
+      const dueDate = new Date(bill.dueDate);
+      return (
+        !bill.paymentStatus &&
+        dueDate.getFullYear() === targetDate.getFullYear() &&
+        dueDate.getMonth() === targetDate.getMonth() &&
+        dueDate.getDate() === targetDate.getDate()
+      );
+    });
+
+    setNotificationCount(dueSoon.length);
+  } catch (err) {
+    console.error("Error fetching bills:", err);
+  }
+};
+
 
     fetchBills();
   }, [currentUser._id]);
