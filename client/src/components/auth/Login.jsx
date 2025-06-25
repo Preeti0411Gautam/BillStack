@@ -6,42 +6,51 @@ import {
   signInSuccess,
 } from "../../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-const baseURL = import.meta.env.VITE_BACKEND_URL;
 
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ loginId: "", password: "" });
   const { error, loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === "password" ? value : value.trim(),
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
+
+    if (!formData.loginId || !formData.password) {
       dispatch(signInFailure("Please fill in all fields"));
       return;
     }
 
     try {
-      dispatch(signInStart());
+      dispatch(signInStart()); // start loading
 
       const response = await fetch(`${baseURL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        credentials: "include",
+        body: JSON.stringify({
+          username: formData.loginId,
+          password: formData.password,
+        }),
       });
 
-      const data = await response.json();
+      const data = await response.json(); // ⬅️ define data here
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      dispatch(signInSuccess(data));
+      dispatch(signInSuccess({ user: data.user })); // ✅ now use it safely
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
@@ -54,9 +63,16 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white border border-gray-200 shadow-xl rounded-2xl p-8 sm:p-10"
       >
-        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-10">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-6">
           Login
         </h2>
+
+        {/* ERROR MESSAGE BOX */}
+        {error && (
+          <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-sm">
+            <strong className="font-semibold">Error: </strong> {error}
+          </div>
+        )}
 
         <div className="mb-8">
           <label className="block text-lg font-semibold mb-2 text-gray-800">
@@ -64,9 +80,9 @@ const Login = () => {
           </label>
           <input
             type="text"
-            name="username"
+            name="loginId"
             placeholder="Enter your username or email"
-            value={formData.username}
+            value={formData.loginId}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
             required
@@ -105,12 +121,6 @@ const Login = () => {
             Create an Account
           </Link>
         </p>
-
-        {error && (
-          <p className="mt-4 text-center text-sm text-red-600 font-medium">
-            {error}
-          </p>
-        )}
       </form>
     </div>
   );

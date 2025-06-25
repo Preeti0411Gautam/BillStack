@@ -1,5 +1,7 @@
 import React from 'react';
 import { FaRegCopyright } from "react-icons/fa";
+     import { Link } from "react-router-dom";
+
 
 const Footer = () => {
   return (
@@ -16,27 +18,29 @@ const Footer = () => {
           <span>2024 BillStack, Inc. All rights reserved.</span>
         </div>
       </div>
+     
 
-      {/* Footer Links */}
-      <div className="mt-6">
-        <ul className="flex flex-wrap justify-center space-x-6 text-sm font-medium">
-          <li className="hover:text-white hover:underline cursor-pointer">
-            Legal Stuff
-          </li>
-          <li className="hover:text-white hover:underline cursor-pointer">
-            Privacy Policy
-          </li>
-          <li className="hover:text-white hover:underline cursor-pointer">
-            Security
-          </li>
-          <li className="hover:text-white hover:underline cursor-pointer">
-            Website Accessibility
-          </li>
-          <li className="hover:text-white hover:underline cursor-pointer">
-            Manage Cookies
-          </li>
-        </ul>
-      </div>
+<div className="mt-6">
+  <ul className="flex flex-wrap justify-center space-x-6 text-sm font-medium text-gray-400">
+    <li>
+      <Link to="/about" className="hover:text-white hover:underline">
+        About Us
+      </Link>
+    </li>
+    <li>
+      <Link to="/contact" className="hover:text-white hover:underline">
+        Contact Us
+      </Link>
+    </li>
+    <li>
+      <Link to="/faq" className="hover:text-white hover:underline">
+        FAQ
+      </Link>
+    </li>
+    
+  </ul>
+</div>
+
     </footer>
   );
 };

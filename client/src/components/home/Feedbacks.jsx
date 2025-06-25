@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
-
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,9 +40,12 @@ const Feedbacks = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const res = await fetch(`${baseURL}/api/feedback/feedbacks`);
+        const res = await fetch(`${baseURL}/api/feedback/feedbacks`, {
+          method: "GET",
+          credentials: "include",
+        });
         if (!res.ok) throw new Error("Failed to fetch feedbacks");
-        
+
         const data = await res.json();
         if (data.success) {
           setFeedbacks(data.feedbacks);
@@ -119,7 +121,9 @@ const Feedbacks = () => {
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
-                  transform: `translateX(-${(100 / slidesToShow) * currentIndex}%)`,
+                  transform: `translateX(-${
+                    (100 / slidesToShow) * currentIndex
+                  }%)`,
                   width: `${(feedbacks.length * 100) / slidesToShow}%`,
                 }}
               >

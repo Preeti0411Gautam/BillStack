@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Signup = () => {
@@ -14,33 +15,40 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]:value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
+
+    const { username, name, email, password } = formData;
+
+    if (!username || !name || !email || !password) {
       return setErrorMessage("Please provide all details");
     }
 
     try {
       setLoading(true);
       setErrorMessage(null);
+
       const response = await fetch(`${baseURL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
 
       const data = await response.json();
 
-      if (data.success === false) {
-        return setErrorMessage(data.message);
+      if (!response.ok) {
+        return setErrorMessage(data.message || "Something went wrong");
       }
 
-      if (response.ok) {
-        navigate("/login");
-      }
+      navigate("/login");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -58,6 +66,14 @@ const Signup = () => {
           Sign Up
         </h2>
 
+
+
+        {errorMessage && (
+          <p className="mt-5 text-center text-red-600 font-medium">
+            {errorMessage}
+          </p>
+        )}
+        
         <div className="mb-8">
           <label className="block text-xl font-semibold text-gray-800 mb-3">
             Username
@@ -126,13 +142,13 @@ const Signup = () => {
           {loading ? "Creating..." : "Sign Up"}
         </button>
 
-        {errorMessage && (
-          <p className="mt-5 text-center text-red-600 font-medium">{errorMessage}</p>
-        )}
 
         <p className="mt-6 text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold underline text-gray-800 hover:text-gray-900">
+          <Link
+            to="/login"
+            className="font-semibold underline text-gray-800 hover:text-gray-900"
+          >
             Login
           </Link>
         </p>

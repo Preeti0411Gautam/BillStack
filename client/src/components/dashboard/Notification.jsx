@@ -1,28 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { FaBell, FaCheckCircle, FaExclamationTriangle, FaUpload } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  FaBell,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaUpload,
+} from "react-icons/fa";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 const Notification = () => {
   const [notifications, setNotifications] = useState({
     dueDate: [],
-    uploadReminders: []
+    uploadReminders: [],
   });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('dueDate');
+  const [activeTab, setActiveTab] = useState("dueDate");
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      if (!currentUser) return;
-      
+     
+
       try {
         setLoading(true);
-        
+
         // Fetch both types of notifications in parallel
         const [dueDateRes, uploadRemindersRes] = await Promise.all([
-          fetch(`${baseURL}/api/notifications/due-date/${currentUser._id}`),
-          fetch(`${baseURL}/api/notifications/upload-reminders/${currentUser._id}`)
+          fetch(`${baseURL}/api/notifications/due-date/${currentUser._id}`, {
+            method: "GET",
+            credentials: "include",
+          }),
+          fetch(
+            `${baseURL}/api/notifications/upload-reminders/${currentUser._id}`,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          ),
         ]);
 
         const dueDateData = await dueDateRes.json();
@@ -30,10 +44,10 @@ const Notification = () => {
 
         setNotifications({
           dueDate: dueDateData.data || [],
-          uploadReminders: uploadRemindersData.data || []
+          uploadReminders: uploadRemindersData.data || [],
         });
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error("Error fetching notifications:", error);
       } finally {
         setLoading(false);
       }
@@ -42,15 +56,7 @@ const Notification = () => {
     fetchNotifications();
   }, [currentUser]);
 
-  if (!currentUser) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center text-gray-500 text-xl">
-          Please sign in to view notifications
-        </div>
-      </div>
-    );
-  }
+ 
 
   if (loading) {
     return (
@@ -60,7 +66,8 @@ const Notification = () => {
     );
   }
 
-  const totalNotifications = notifications.dueDate.length + notifications.uploadReminders.length;
+  const totalNotifications =
+    notifications.dueDate.length + notifications.uploadReminders.length;
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6">
@@ -74,27 +81,35 @@ const Notification = () => {
       {/* Tabs */}
       <div className="flex border-b border-gray-200 mb-6">
         <button
-          className={`py-2 px-4 font-medium flex items-center ${activeTab === 'dueDate' ? 'text-gray-800 border-b-2 border-gray-600 font-semibold' : 'text-gray-500 font-semibold'}`}
-          onClick={() => setActiveTab('dueDate')}
+          className={`py-2 px-4 font-medium flex items-center ${
+            activeTab === "dueDate"
+              ? "text-gray-800 border-b-2 border-gray-600 font-semibold"
+              : "text-gray-500 font-semibold"
+          }`}
+          onClick={() => setActiveTab("dueDate")}
         >
-      
           Upcoming Payments ({notifications.dueDate.length})
         </button>
         <button
-          className={`py-2 px-4 font-medium flex items-center ${activeTab === 'uploadReminders' ? 'text-gray-800 border-b-2 border-gray-600 font-semibold' : 'text-gray-500 font-semibold'}`}
-          onClick={() => setActiveTab('uploadReminders')}
+          className={`py-2 px-4 font-medium flex items-center ${
+            activeTab === "uploadReminders"
+              ? "text-gray-800 border-b-2 border-gray-600 font-semibold"
+              : "text-gray-500 font-semibold"
+          }`}
+          onClick={() => setActiveTab("uploadReminders")}
         >
-          
           Upload Reminders ({notifications.uploadReminders.length})
         </button>
       </div>
 
       {/* Notification Content */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        {activeTab === 'dueDate' ? (
+        {activeTab === "dueDate" ? (
           <DueDateNotifications notifications={notifications.dueDate} />
         ) : (
-          <UploadReminderNotifications notifications={notifications.uploadReminders} />
+          <UploadReminderNotifications
+            notifications={notifications.uploadReminders}
+          />
         )}
       </div>
     </div>
@@ -175,7 +190,8 @@ const UploadReminderNotifications = ({ notifications }) => {
                     {reminder.billType} bill not uploaded
                   </p>
                   <span className="text-xs text-gray-500">
-                    Due by {new Date(reminder.expectedDate).toLocaleDateString()}
+                    Due by{" "}
+                    {new Date(reminder.expectedDate).toLocaleDateString()}
                   </span>
                 </div>
                 <p className="text-sm text-gray-500 mt-1">

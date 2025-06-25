@@ -52,6 +52,7 @@ const BillType = () => {
       const res = await fetch(`${baseURL}/api/bill/upload`, {
         method: "POST",
         body: formWithUserId,
+         credentials: "include",
       });
 
       const data = await res.json();
@@ -68,13 +69,6 @@ const BillType = () => {
     }
   };
 
-  if (!currentUser) {
-    return (
-      <p className="mt-20 font-bold text-3xl text-center text-gray-500">
-        Please sign in to upload your bill...
-      </p>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center  px-4 py-10">

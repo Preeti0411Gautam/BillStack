@@ -18,7 +18,8 @@ const userSlice = createSlice({
             state.error =null;
         },
         signInSuccess : (state, action )=>{
-            state.currentUser = action.payload;
+            state.currentUser = action.payload.user;
+            state.token = action.payload.token;
             state.loading =false;
             state.error =false;
         },

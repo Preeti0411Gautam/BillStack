@@ -50,6 +50,7 @@ const FeedbackForm = () => {
           name: currentUser.name,
           date: new Date().toLocaleDateString('en-GB'),
         }),
+        credentials: "include", 
       });
       const data = await res.json();
       if (data.success) {

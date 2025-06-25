@@ -14,7 +14,6 @@ import {
 import { useSelector } from "react-redux";
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -37,14 +36,28 @@ const Analytics = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   async function fetchUserData() {
     try {
       const response = await fetch(
-        `${baseURL}/api/bill/getBillByUserId/${currentUser._id}`
+        `${baseURL}/api/bill/getBillByUserId/${currentUser._id}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
@@ -85,7 +98,7 @@ const Analytics = () => {
 
         validBills.forEach((bill) => {
           const monthIndex = new Date(bill.dueDate).getMonth();
-          
+
           if (monthIndex >= 0 && monthIndex < 12) {
             monthlyData[monthIndex][bill.billType] += bill.amount;
           }
@@ -103,7 +116,14 @@ const Analytics = () => {
         }, 0);
         setTotalExpenses(total);
 
-        const billTypes = ["Internet", "Electricity", "Water", "Gas", "Other", "Rent"];
+        const billTypes = [
+          "Internet",
+          "Electricity",
+          "Water",
+          "Gas",
+          "Other",
+          "Rent",
+        ];
         const colorMap = {
           Internet: "#8FD14F",
           Electricity: "#EF5A6F",
@@ -189,15 +209,12 @@ const Analytics = () => {
 
   return (
     <div className="flex flex-col items-center p-6 space-y-8 w-full max-w-screen-xl mx-auto">
-      {currentUser === null ? (
-        <div className="text-center text-3xl font-semibold text-gray-400">
-          Please sign in to see Analytics...
-        </div>
-      ) : (
-        <>
+      
           {/* Year Filter Dropdown */}
           <div className="w-full flex justify-end mb-4">
-            <label className="text-gray-800 text-xl font-medium mr-2">Year:</label>
+            <label className="text-gray-800 text-xl font-medium mr-2">
+              Year:
+            </label>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -214,7 +231,9 @@ const Analytics = () => {
           {/* Chart */}
           <div className="w-full lg:max-w-4xl p-6">
             {chartData ? (
-              <div style={{ position: "relative", width: "100%", height: "400px" }}>
+              <div
+                style={{ position: "relative", width: "100%", height: "400px" }}
+              >
                 <Line options={options} data={chartData} />
               </div>
             ) : (
@@ -226,7 +245,9 @@ const Analytics = () => {
 
           {/* Table */}
           <div className="w-full lg:max-w-4xl bg-white shadow-xl rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Monthly Breakdown</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              Monthly Breakdown
+            </h2>
             <p className="text-lg text-gray-600 mb-6">
               Total Expenses Across All Months:{" "}
               <span className="text-red-500 font-semibold">
@@ -238,7 +259,16 @@ const Analytics = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {["Month", "Internet", "Electricity", "Water", "Gas", "Other", "Rent", "Total"].map((header) => (
+                    {[
+                      "Month",
+                      "Internet",
+                      "Electricity",
+                      "Water",
+                      "Gas",
+                      "Other",
+                      "Rent",
+                      "Total",
+                    ].map((header) => (
                       <th
                         key={header}
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -259,13 +289,27 @@ const Analytics = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {monthData.month}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Internet.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Electricity.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Water.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Gas.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Other.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">₹{monthData.Rent.toFixed(2)}</td>
-                        <td className="px-6 py-4 font-semibold text-sm text-gray-900">₹{monthTotal.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Internet.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Electricity.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Water.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Gas.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Other.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          ₹{monthData.Rent.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 font-semibold text-sm text-gray-900">
+                          ₹{monthTotal.toFixed(2)}
+                        </td>
                       </tr>
                     );
                   })}
@@ -273,10 +317,8 @@ const Analytics = () => {
               </table>
             </div>
           </div>
-        </>
-      )}
-    </div>
+</div>
   );
-};
+}
 
 export default Analytics;

@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import Loading from "./Loading";
 import PrivateRoute from "./PrivateRoute";
 import NotFound from "../components/common/NotFound";
+import AboutUs from "../components/common/AboutUs";
+import FAQ from "../components/common/FAQ";
+import ConnectUs from "../components/home/ConnectUs";
 
 // Lazy load all route components
 const Home = lazy(() => import("../components/home/Home"));
@@ -13,36 +16,30 @@ const Notification = lazy(() => import("../components/dashboard/Notification"));
 const Analytics = lazy(() => import("../components/dashboard/Analytics"));
 const BillList = lazy(() => import("../components/dashboard/BillList"));
 
-const Profile = lazy(() =>import("../components/dashboard/Profile"));
+const Profile = lazy(() => import("../components/dashboard/Profile"));
 
-// const Profile = lazy(() =>
-//   wait(1000).then(() => import("../components/dashboard/Profile"))
-// );
-
-
-// const wait = (time) => {
-//   return new Promise(resolve => {
-//     setTimeout(resolve, time);
-//   });
-// };
 const AppRoutes = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/billType" element={<BillType />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/billList" element={<BillList />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/faq" element={<FAQ/>} />
+        <Route path="/contact" element={<ConnectUs />} />
         
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
-           <Route path="*" element={<NotFound/>} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/billType" element={<BillType />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/billList" element={<BillList />} />
         </Route>
+        {/* Catch-All Route (Public) */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

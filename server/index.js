@@ -43,7 +43,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "http://13.60.52.168:3001", 
+  origin: "http://localhost:5173", //`http://13.60.52.168:3001`||
   credentials: true, 
 };
 
