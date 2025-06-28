@@ -76,12 +76,23 @@ export const signUp = async (req, res, next) => {
 // ===================== LOGIN ===================== //
 export const login = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    const validUser = await UserModel.findOne({
-      $or: [{ email }, { username }],
-    });
+    let { username, email, password } = req.body;
 
+    const query = [];
+    if (username && username.includes("@")) {
+      query.push({ email: username });
+    } else {
+      if (username) query.push({ username });
+      if (email) query.push({ email });
+    }
+
+    if (query.length === 0) {
+      return next(errorHandler(400, "Email or username is required"));
+    }
+
+    const validUser = await UserModel.findOne({ $or: query });
     if (!validUser) return next(errorHandler(404, "User not found"));
+
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) return next(errorHandler(401, "Invalid credentials"));
 
@@ -103,13 +114,16 @@ export const login = async (req, res, next) => {
       });
 
     const { password: _, ...userData } = validUser._doc;
-    res
-      .status(200)
-      .json({ success: true, message: "Login successful", user: userData });
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: userData,
+    });
   } catch (err) {
     next(err);
   }
 };
+
 
 // ===================== SIGNOUT ===================== //
 export const signout = (req, res, next) => {

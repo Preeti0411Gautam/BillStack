@@ -6,6 +6,7 @@ import NotFound from "../components/common/NotFound";
 import AboutUs from "../components/common/AboutUs";
 import FAQ from "../components/common/FAQ";
 import ConnectUs from "../components/home/ConnectUs";
+import PublicRoute from "./PublicRoutes";
 
 // Lazy load all route components
 const Home = lazy(() => import("../components/home/Home"));
@@ -24,12 +25,15 @@ const AppRoutes = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/faq" element={<FAQ/>} />
         <Route path="/contact" element={<ConnectUs />} />
         
+        <Route element={<PublicRoute/>}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        </Route>
+
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
@@ -38,6 +42,8 @@ const AppRoutes = () => {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/billList" element={<BillList />} />
         </Route>
+
+        
         {/* Catch-All Route (Public) */}
         <Route path="*" element={<NotFound />} />
       </Routes>

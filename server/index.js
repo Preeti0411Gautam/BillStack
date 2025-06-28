@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import cors  from "cors";
+import basicAuth from 'express-basic-auth';
 
 const app= express();
 app.use(cookieParser());
@@ -43,11 +44,14 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "http://localhost:5173", //`http://13.60.52.168:3001`||
+  origin: "http://localhost:3001", //`http://13.60.52.168:3001`||
   credentials: true, 
+  allowedHeaders: ["Content-Type", "X-CSRF-Token"],
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 
 
@@ -66,10 +70,17 @@ app.use("/api/notifications", notificationRoutes);
 
 
 // Metrics route
-app.get('/metrics', async (req, res) => {
-  res.setHeader("Content-Type", promClient.register.contentType);
-  res.end(await promClient.register.metrics());
-});
+app.get(
+  '/metrics',
+  basicAuth({
+    users: { [process.env.METRICS_USER]: process.env.METRICS_PASS },
+    challenge: true,
+  }),
+  async (req, res) => {
+    res.setHeader("Content-Type", promClient.register.contentType);
+    res.end(await promClient.register.metrics());
+  }
+);
 
 // Root test
 app.get('/', (req, res) => {

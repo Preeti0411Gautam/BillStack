@@ -13,11 +13,6 @@ const faqs = [
       "Yes. We use secure protocols and follow industry best practices to ensure your data is protected and accessible only to you.",
   },
   {
-    question: "Can I pay my bills directly?",
-    answer:
-      "Yes. BillStack integrates with Razorpay so you can pay your bills directly from the platform.",
-  },
-  {
     question: "Is BillStack free to use?",
     answer:
       "Yes, BillStack is free to use. Some premium features might be introduced later, but the core features will always remain free.",

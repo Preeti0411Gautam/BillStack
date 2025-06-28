@@ -18,7 +18,6 @@ export const uploadFeedback = async (req, res, next) => {
             });
         }
   
-        // Assuming you have a Feedback model to save the feedback data
         const newFeedback = await Feedback.create({
             userId,
             feedback,
@@ -31,8 +30,6 @@ export const uploadFeedback = async (req, res, next) => {
             data: newFeedback,
             message: "Feedback submitted successfully",
         });
-
-     console.log(data)
 
     } catch (err) {
         next(err);
