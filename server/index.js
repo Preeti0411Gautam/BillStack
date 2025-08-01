@@ -44,7 +44,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "http://localhost:3001", //`http://13.60.52.168:3001`||
+  origin: "https://bill-stack.vercel.app",
   credentials: true, 
   allowedHeaders: ["Content-Type", "X-CSRF-Token"],
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
