@@ -44,13 +44,13 @@ const Login = () => {
         }),
       });
 
-      const data = await response.json(); // ⬅️ define data here
+      const data = await response.json(); 
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      dispatch(signInSuccess({ user: data.user })); // ✅ now use it safely
+      dispatch(signInSuccess({ user: data.user })); 
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
