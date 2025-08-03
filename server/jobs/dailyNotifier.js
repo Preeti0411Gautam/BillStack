@@ -11,7 +11,7 @@ export const dueDateNotifier = () => {
 
 
 export const uploadBillNotifer =()=>{
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 9 * * *', async () => {
   // console.log("Running daily bill reminder check at 9 AM...");
   await sendBillReminder();
 });
