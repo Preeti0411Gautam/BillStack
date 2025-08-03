@@ -30,12 +30,17 @@ const userSchema = mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [8, "Password must be at least 8 characters"],
     },
-    familyMembers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    // familyMembers: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User",
+    //   },
+    // ],
+    billPreferences: {
+      type: [String], // Array of bill types user wants to track
+      enum: ["Electricity", "Water", "Gas", "Internet", "Rent", "Other"],
+      default: [], // Means "track all" if user hasn’t chosen
+    },
   },
   {
     timestamps: true,

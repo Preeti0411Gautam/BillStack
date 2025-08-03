@@ -1,7 +1,7 @@
 import express from 'express';
 import { 
   getUpcomingBillNotifications, 
-  getMissingBillNotifications 
+  getMissingBillNotifications,
 } from '../controllers/notificationController.js';
 import { metricsLogger } from '../middlewares/metricsLogger.js';
 

@@ -13,6 +13,5 @@ router.patch('/togglePayment/:id', togglePaymentStatus);
 router.patch('/updateBillFile/:id', upload.single('billImage'), updateBill);
 router.get("/filterByMonth", getBillsByMonth);
 router.get('/getYears/:userId', getBillYearsByUser);
-
 export default router;
 

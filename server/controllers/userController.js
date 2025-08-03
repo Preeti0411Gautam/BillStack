@@ -53,3 +53,44 @@ export const deleteUser = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+
+export const updateBillPreferences = async (req, res) => {
+  try {
+    const { preferences } = req.body; // Incoming data from frontend
+    const user = await UserModel.findByIdAndUpdate(
+      req.params.userId,
+      { billPreferences: preferences }, // Update the correct field in the database
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: "Preferences updated", user });
+  } catch (err) {
+    res.status(500).json({ error: "Unable to update preferences" });
+  }
+};
+
+
+export const getBillPreferences = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Correctly select the 'billPreferences' field from the user document
+    const user = await UserModel.findById(userId).select('billPreferences');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the 'billPreferences' field, using an empty array as a fallback
+    res.status(200).json({ preferences: user.billPreferences || [] });
+  } catch (error) {
+    console.error('Error fetching preferences:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
