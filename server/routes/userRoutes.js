@@ -8,12 +8,12 @@ import { updateBillPreferences } from '../controllers/userController.js';
 const router = express.Router();
 
 router.use(metricsLogger);
-router.use(verifyToken); // Protect all user routes
+// router.use(verifyToken); // Protect all user routes
 
 
 // Protect routes that modify data with CSRF middleware
-router.patch('/update/:userId', csrfMiddleware, updateUser);
-router.delete('/delete/:userId', csrfMiddleware, deleteUser);
+router.patch('/update/:userId', verifyToken,csrfMiddleware, updateUser);
+router.delete('/delete/:userId',verifyToken, csrfMiddleware, deleteUser);
 router.put('/preferences/:userId', updateBillPreferences);
 
 // The GET request for fetching preferences does not need CSRF protection
