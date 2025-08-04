@@ -9,6 +9,7 @@ import {
 } from "../../redux/user/userSlice";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import PreferencesForm from "./PreferencesForm";
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -208,8 +209,10 @@ const Profile = () => {
             >
               Sign Out
             </button>
+            
           </div>
         </div>
+        <PreferencesForm/>
       </div>
 
       {showDeleteModal && (

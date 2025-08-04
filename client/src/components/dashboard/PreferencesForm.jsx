@@ -76,9 +76,9 @@ const PreferencesForm = () => {
 
   return (
     <div className="min-h-screen py-10 px-6">
-            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-3xl overflow-hidden">
+      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-3xl overflow-hidden">
 
-      <div className="bg-gray-700 py-5 px-8 text-white  border rounded-lg">
+      <div className="p-5 text-gray-700 bg-gray-200 border rounded-lg">
         <h2 className="text-2xl font-bold text-center">Notification Preferences</h2>
       </div>
       
