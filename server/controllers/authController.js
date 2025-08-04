@@ -54,13 +54,13 @@ export const signUp = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "None",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       })
       .cookie("csrf_token", csrfToken, {
         httpOnly: false,
         secure: true,
-        sameSite: "None",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       });
 
@@ -103,13 +103,13 @@ export const login = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "None",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       })
       .cookie("csrf_token", csrfToken, {
         httpOnly: false,
         secure: true,
-        sameSite: "None",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       });
 
@@ -131,11 +131,11 @@ export const signout = (req, res, next) => {
     res
       .clearCookie("token", {
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "Strict",
         secure: true,
       })
       .clearCookie("csrf_token", {
-        sameSite: "None",
+        sameSite: "Strict",
         secure: true,
       })
       .status(200)
