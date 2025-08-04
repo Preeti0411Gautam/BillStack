@@ -57,6 +57,7 @@ const Profile = () => {
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": Cookies.get("csrf_token"),
+          
         },
         credentials: "include",
         body: JSON.stringify(updatedFields),
