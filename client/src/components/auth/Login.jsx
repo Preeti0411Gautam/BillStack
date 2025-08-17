@@ -44,13 +44,13 @@ const Login = () => {
         }),
       });
 
-      const data = await response.json(); 
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      dispatch(signInSuccess({ user: data.user })); 
+      dispatch(signInSuccess({ user: data.user }));
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
@@ -70,7 +70,10 @@ const Login = () => {
         {/* ERROR MESSAGE BOX */}
         {error && (
           <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-sm">
-            <strong className="font-semibold">Error: </strong> {error}
+            <strong className="font-semibold"></strong>
+            {error === "User not found"
+              ? "User not found. Please check your credentials."
+              : "Something went wrong. Please try again later."}
           </div>
         )}
 
